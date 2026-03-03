@@ -1,0 +1,98 @@
+{
+  "run": [
+    "entropy_sensitivity",
+    "noisy_sgd",
+    "wiener_figures",
+    "privacy_test_fig1",
+    "image_noise",
+    "epsilon_utility_curve",
+    "entropy_bound_curve",
+    "metrics_comparison"
+  ],
+  "entropy_sensitivity": {
+    "out_csv": "data/entropy_sensitivity_results.csv",
+    "n": 100,
+    "m": 10,
+    "n_trials": 500
+  },
+  "noisy_sgd": {
+    "target": [1.0, 2.0],
+    "eta": 0.1,
+    "G": 1.0,
+    "steps": 100,
+    "seed": 42
+  },
+  "wiener_figures": {
+    "out_csv": "data/wiener_curves.csv",
+    "seed": 42,
+    "n_t": 80,
+    "n_paths": 50,
+    "epsilon": 1.0,
+    "delta": 1e-5,
+    "dpi": 150
+  },
+  "privacy_test_fig1": {
+    "seed": 42,
+    "t": 2,
+    "max_check": 10000,
+    "k_vals": [5, 10, 20, 50],
+    "gamma_min": 1,
+    "gamma_max": 12,
+    "gamma_n": 10,
+    "dpi": 150
+  },
+  "image_noise": {
+    "input": "",
+    "output": "data/image_noise",
+    "epsilon": 1.0,
+    "delta": 1e-5,
+    "mechanism": "both",
+    "out_csv": "data/image_noise_results.csv",
+    "seed": 42
+  },
+  "epsilon_utility_curve": {
+    "seed": 42,
+    "delta": 1e-5,
+    "epsilons": [0.1, 0.25, 0.5, 1.0, 2.0, 4.0],
+    "n_trials": 5,
+    "dpi": 150
+  },
+  "entropy_bound_curve": {
+    "n_vals": [50, 100, 200, 500, 1000, 2000, 5000],
+    "dpi": 150
+  },
+  "metrics_comparison": {
+    "seed": 42,
+    "delta": 1e-5,
+    "epsilons": [0.5, 1.0, 2.0],
+    "dpi": 150
+  },
+  "csv_entropy_experiment": {
+    "input": "data/y_amazon-google-large.csv",
+    "column": "y",
+    "bins": 30,
+    "epsilon": 1.0,
+    "out_csv": "data/csv_entropy_results.csv",
+    "out_fig": "fig_csv_entropy.png",
+    "max_rows": 100000,
+    "seed": 42,
+    "dpi": 150
+  },
+  "csv_entropy_all": {
+    "data_dir": "data",
+    "bins": 30,
+    "epsilon": 1.0,
+    "max_rows": 100000,
+    "seed": 42,
+    "dpi": 150,
+    "datasets": [
+      { "input": "y_amazon-google-large.csv", "column": "y" },
+      { "input": "house-prices-train.csv", "column": "SalePrice" },
+      { "input": "home-credit-application-train.csv", "column": "AMT_INCOME_TOTAL" },
+      { "input": "tabular-feature-engineering.csv", "column": "y1" },
+      { "input": "r_diff_train.csv", "column": "y1" },
+      { "input": "pow_train.csv", "column": "y1" },
+      { "input": "unemployment_data.csv", "column": "UNRATE" }
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+# Large data files — use download_data.py or see README. GitHub limit 100 MB.
+*.csv
+*.XPT
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# LaTeX
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.synctex.gz
+
+# OS
+.DS_Store
+Thumbs.db

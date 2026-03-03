@@ -1,0 +1,57 @@
+{
+  "data_dir": ".",
+  "_kaggle_login": "Kaggle 下载需要登录: pip install kaggle，在 https://www.kaggle.com/settings 创建 API Token，将 kaggle.json 放到 ~/.kaggle/ (Windows: C:\\Users\\你的用户名\\.kaggle\\)。竞赛数据需在网页上先接受规则 (Join Competition / Accept Rules)。",
+  "sources": [
+    {
+      "type": "uci",
+      "id": 1276,
+      "save_as": "y_amazon-google-large.csv",
+      "description": "Amazon Product and Google Locations Reviews (UCI). Column 'y' = reviews per hour."
+    },
+    {
+      "type": "kaggle_competition",
+      "id": "house-prices-advanced-regression-techniques",
+      "save_as": "house-prices-train.csv",
+      "file_in_dataset": "train.csv",
+      "description": "House Prices - Advanced Regression. 80+ columns (numeric + categorical). https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data"
+    },
+    {
+      "type": "kaggle_competition",
+      "id": "home-credit-default-risk",
+      "save_as": "home-credit-application-train.csv",
+      "file_in_dataset": "application_train.csv",
+      "description": "Home Credit Default Risk. Multiple tables; this is application_train (many columns). https://www.kaggle.com/competitions/home-credit-default-risk/data"
+    },
+    {
+      "type": "kaggle",
+      "id": "nalisha/flight-delay-and-cancellation-data-1-million-2024",
+      "save_as": "flight-delay-2024.csv",
+      "description": "Flight Delay & Cancellation 2024. Many columns (flight/time/weather). https://www.kaggle.com/datasets/nalisha/flight-delay-and-cancellation-data-1-million-2024"
+    },
+    {
+      "type": "kaggle",
+      "id": "kanchana1990/world-air-quality-data-2024-updated",
+      "save_as": "world-air-quality-2024.csv",
+      "description": "World Air Quality 2024. Many air quality columns. https://www.kaggle.com/datasets/kanchana1990/world-air-quality-data-2024-updated"
+    },
+    {
+      "type": "kaggle",
+      "id": "alfredkondoro/u-s-economic-indicators-1974-2024",
+      "save_as": "us-economic-indicators-1974-2024.csv",
+      "description": "U.S. Economic Indicators 1974-2024. Many economic columns. https://www.kaggle.com/datasets/alfredkondoro/u-s-economic-indicators-1974-2024"
+    },
+    {
+      "type": "kaggle",
+      "id": "rudritarahman/cdc-brfss-survey-data-2024",
+      "save_as": "cdc-brfss-2024.csv",
+      "description": "CDC BRFSS Survey 2024. Survey data, many variables. https://www.kaggle.com/datasets/rudritarahman/cdc-brfss-survey-data-2024"
+    },
+    {
+      "type": "kaggle",
+      "id": "jeffheaton/tabular-feature-engineering-dataset",
+      "save_as": "tabular-feature-engineering.csv",
+      "description": "Tabular Feature Engineering. Many columns for feature engineering. https://www.kaggle.com/datasets/jeffheaton/tabular-feature-engineering-dataset"
+    }
+  ],
+  "_search_more": "在 Kaggle 找更多多变量 CSV: 打开 https://www.kaggle.com/datasets ，搜索 tabular / CSV / many features ，左侧筛选 File type → CSV ，按 Size 或 Downloads 排序，点进数据集在 Data 里看列数。"
+}
