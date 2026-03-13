@@ -1,259 +1,169 @@
-\section*{Final Check: Remaining Issues in the Current Version}
+\section*{Final Remaining Fixes for the Latest Version}
 
-\subsection*{Overall Assessment}
-The current manuscript is substantially stronger than the earlier versions.
-The core theorem line is now largely stable:
-Theorem~3 and Appendix~B are aligned under replacement adjacency,
-Theorem~4 has an explicit add/remove statement,
-and Appendix~I now gives a valid sufficient parameter domain.
-The experiments are also much better organized around privacy-test behavior,
-entropy-sensitivity validation, baseline comparison, and attack-based evaluation.
+\subsection*{1. Replace all generic Appendix A proof references in \texttt{main.tex}}
 
-At this stage, the remaining issues are no longer major theorem-breaking problems.
-They are mainly final consistency, citation, appendix-structure, and wording issues
-that should be cleaned up before submission.
-
-\subsection*{Priority 1: Fix Appendix Cross-References in the Main Text}
-
-\subsubsection*{Current problem}
-The main text still repeatedly says things like:
+\paragraph{Replace in Theorem 3}
 \begin{quote}
 \texttt{The proof is in Appendix A.}
 \end{quote}
-or
+with
 \begin{quote}
-\texttt{See Appendix A for the proof.}
-\end{quote}
-However, the appendix is now structured as:
-\[
-\text{Appendix B, C, D, E, F, G, H, I, J, K}
-\]
-with specific results proved in different subsections.
-So the reference to a generic ``Appendix A'' is no longer correct.
-
-\subsubsection*{Required action}
-Replace each generic appendix reference with the exact appendix letter or subsection that contains the result.
-
-\subsubsection*{Examples}
-\begin{itemize}
-    \item For Theorem~3, replace
-    \begin{quote}
-    \texttt{The proof is in Appendix A.}
-    \end{quote}
-    with
-    \begin{quote}
-    \texttt{The proof is given in Appendix~B.}
-    \end{quote}
-
-    \item For Lemma~1, replace
-    \begin{quote}
-    \texttt{Proof is in Appendix A.}
-    \end{quote}
-    with
-    \begin{quote}
-    \texttt{Proof is given in Appendix~D.}
-    \end{quote}
-
-    \item For Lemma~2, replace
-    \begin{quote}
-    \texttt{Proof is in Appendix A.}
-    \end{quote}
-    with
-    \begin{quote}
-    \texttt{Proof is given in Appendix~G.}
-    \end{quote}
-
-    \item For Theorem~4, replace
-    \begin{quote}
-    \texttt{Proof is in Appendix A.}
-    \end{quote}
-    with
-    \begin{quote}
-    \texttt{Proof is given in Appendix~H.}
-    \end{quote}
-\end{itemize}
-
-\paragraph{Reason}
-At the current stage, incorrect appendix references are one of the most visible signs that the manuscript is still under revision rather than fully synchronized.
-
-\subsection*{Priority 2: Update the Appendix B Title to Match the Main Text Precisely}
-
-\subsubsection*{Current problem}
-Appendix~B is still titled:
-\begin{quote}
-\texttt{Proof of Theorem 3 (Sensitivity of H)}
-\end{quote}
-This is no longer the best title, because the main text now states Theorem~3 specifically as a Shannon-entropy sensitivity result under replacement adjacency.
-
-\subsubsection*{Suggested replacement}
-\begin{quote}
-\texttt{B. Proof of Theorem 3 (Shannon Entropy Sensitivity under Replacement Adjacency)}
+\texttt{The proof is given in Appendix~B.}
 \end{quote}
 
-\paragraph{Reason}
-This makes the appendix title consistent with the stabilized theorem statement and improves precision.
-
-\subsection*{Priority 3: Soften the Figure 4 Caption Slightly}
-
-\subsubsection*{Current problem}
-The current Figure~4 caption contains wording of the form:
+\paragraph{Replace in Lemma 1}
 \begin{quote}
-\texttt{ratio < 1 confirms bound holds}
+\texttt{Proof is in Appendix A.}
 \end{quote}
-This is still a little too strong.
+with
+\begin{quote}
+\texttt{Proof is given in Appendix~D.}
+\end{quote}
 
-\subsubsection*{Suggested replacement}
-Replace the caption with:
+\paragraph{Replace in Lemma 2}
+\begin{quote}
+\texttt{Proof is in Appendix A.}
+\end{quote}
+with
+\begin{quote}
+\texttt{Proof is given in Appendix~G.}
+\end{quote}
+
+\paragraph{Replace in Lemma 3 and Corollary 1}
+\begin{quote}
+\texttt{Proof is in Appendix A.}
+\end{quote}
+with
+\begin{quote}
+\texttt{Proof is given in Appendix~E.}
+\end{quote}
+
+\paragraph{Replace in Lemma 4}
+\begin{quote}
+\texttt{Proof is in Appendix A.}
+\end{quote}
+with
+\begin{quote}
+\texttt{Proof is given in Appendix~F.}
+\end{quote}
+
+\paragraph{Replace in Theorem 4}
+\begin{quote}
+\texttt{Proof is in Appendix A.}
+\end{quote}
+with
+\begin{quote}
+\texttt{Proof is given in Appendix~H.}
+\end{quote}
+
+\subsection*{2. Replace malformed appendix references such as \texttt{Appendix H0a}}
+
+\paragraph{Replace}
+\begin{quote}
+\texttt{Appendix H0a}
+\end{quote}
+with the correct appendix letter, depending on context.
+
+\paragraph{Recommended replacements}
+For supplementary conceptual background:
+\begin{quote}
+\texttt{Appendix~J}
+\end{quote}
+
+For supplementary image-noise and additional experiments:
+\begin{quote}
+\texttt{Appendix~K}
+\end{quote}
+
+\paragraph{Example replacement sentence}
 \begin{quote}
 \texttt{
-Fig.~4. Empirical \(\Delta dH\) vs. theoretical bound (Theorem~3): mean and maximum over adjacent pairs.
-The ratio remains below 1 in the tested regime, indicating that the empirical entropy sensitivity stays below the theoretical bound.
+Supplementary image-noise utility results are provided in Appendix~K and are included only as supporting evidence, not as a central part of the main theorem-to-mechanism evaluation pipeline.
 }
 \end{quote}
 
-\paragraph{Reason}
-This is more cautious and more appropriate for journal-style interpretation.
+\subsection*{3. Replace the current discussion paragraph with a safer final version}
 
-\subsection*{Priority 4: Tighten the Discussion Section}
-
-\subsubsection*{Current problem}
-The discussion section is improved, but it still reads partly like a result summary rather than a sharper interpretation section.
-Also, the uploaded PDF shows the discussion continuing with a visible structural break near the numbered list, which should be checked carefully in the final compiled version.
-
-\subsubsection*{Recommended revision pattern}
-For each discussion paragraph:
-\begin{enumerate}
-    \item state the empirical observation;
-    \item state the interpretation;
-    \item state the limitation or scope.
-\end{enumerate}
-
-\subsubsection*{Suggested replacement style}
 \begin{quote}
 \texttt{
-Figures~5 and~7 show that the tested Laplace, Gaussian, and DP synthetic baselines remain below the theoretical entropy bound, while MIA and linkage-style attack performance move toward random-guess behavior as \(\varepsilon\) decreases.
-This is consistent with the intended privacy--utility tradeoff of the release mechanism.
+The experiments support the following conclusions.
+First, the tested Laplace, Gaussian, and DP synthetic baselines remain below the theoretical entropy bound, while MIA and linkage-style attack performance moves toward random-guess behavior as \(\varepsilon\) decreases.
+This is consistent with the intended privacy--utility tradeoff of the release mechanism in the tested setting.
+Second, the privacy test used by the synthetic-data mechanism \(F\) retains a non-negligible pass rate under suitable parameter choices, supporting the practical feasibility of non-interactive synthetic release.
+Third, the empirical entropy sensitivity remains below the theoretical bound from Theorem~3 across the tested regimes, indicating that the bound is informative for calibration.
+Fourth, the real-data and multi-dataset experiments suggest that the entropy-based DP release pipeline is applicable across multiple tabular domains in the tested setting.
 However, the explicit empirical evaluation remains limited to the tested attack models and does not yet include a direct benchmark for attribute inference.
 }
 \end{quote}
 
-\paragraph{Reason}
-This gives the discussion a more TIFS-style interpretation structure.
+\subsection*{4. Replace the current conclusion with a synchronized final version}
 
-\subsection*{Priority 5: Remove the Internal-Mapping Style Summary Table from Appendix K}
-
-\subsubsection*{Current problem}
-Appendix~K still contains a table summarizing which figure supports which ``abstract contribution''.
-This kind of wording is more appropriate for internal drafting or rebuttal notes than for a final journal appendix.
-
-\subsubsection*{Recommended action}
-Delete the summary table entirely.
-
-\paragraph{If you want to keep it}
-Rename it and rewrite it in purely technical language, for example:
 \begin{quote}
 \texttt{
-Table~K1. Supplementary figures and the corresponding experimental role.
+We have proposed REAEDP, a differential privacy framework for entropy-calibrated data release with formal guarantees and attack-based evaluation.
+The main technical contributions are twofold:
+first, an explicit sensitivity bound for histogram entropy (Theorem~3), which enables calibrated differentially private release of histogram statistics;
+second, a synthetic-data release mechanism \(F\) with a formal \((\varepsilon,\delta)\)-DP guarantee under the stated parameter domain (Theorem~4).
+Across multiple public tabular datasets, the experiments show that the empirical entropy sensitivity remains below the theoretical bound in the tested regime,
+that standard Laplace and Gaussian histogram baselines achieve comparable behavior,
+and that membership-inference and linkage-style attack performance moves toward random-guess behavior as \(\varepsilon\) decreases.
+These results support the use of REAEDP as an algorithmic release pipeline for privacy-preserving data publication in the tested settings.
+
+This work also has several limitations.
+The entropy-based release depends on histogram discretization and may be sensitive to bin selection, especially in high-dimensional settings.
+Scalability to very high-dimensional or very large-scale data may require approximate or distributed implementations.
+The RKHS/Wiener-kernel analysis relies on finite-dimensional numerical approximation of an infinite-dimensional space,
+and tightening the associated approximation error under differential privacy remains open.
+Finally, while the paper explicitly evaluates membership inference and a linkage-style attack,
+stronger experimental coverage of attribute inference and broader multimodal or federated settings is left for future work.
 }
 \end{quote}
 
-And replace entries such as
+\subsection*{5. Replace the Appendix K summary-table wording or delete the table}
+
+\paragraph{Best option}
+Delete the summary table entirely.
+
+\paragraph{If you keep it, rename and rewrite it}
+Replace the table title with:
 \begin{quote}
-\texttt{abstract contribution (i)}
+\texttt{Table~K1. Supplementary figures and their experimental content.}
 \end{quote}
-with
+
+\paragraph{Do not use phrases such as}
+\begin{quote}
+\texttt{supports abstract contribution (i)}
+\end{quote}
+or
+\begin{quote}
+\texttt{connection to theory}
+\end{quote}
+
+\paragraph{Use neutral labels instead}
 \begin{quote}
 \texttt{entropy-sensitivity validation}
 \end{quote}
-or
+\begin{quote}
+\texttt{supplementary image-noise utility comparison}
+\end{quote}
 \begin{quote}
 \texttt{synthetic mechanism behavior}
 \end{quote}
 
-\paragraph{Reason}
-This makes the appendix feel like part of the paper rather than part of the writing process.
+\subsection*{6. Recommended final appendix structure}
 
-\subsection*{Priority 6: Separate Theorem-Critical and Supplementary Appendix Material More Clearly}
-
-\subsubsection*{Current problem}
-The appendix is already much better than before, but it still moves directly from theorem-level proofs into conceptual background and image-noise supplementary material.
-This is not wrong, but it still feels slightly crowded.
-
-\subsubsection*{Suggested structural cleanup}
-Use explicit appendix roles:
-\begin{itemize}
-    \item Appendix~B--I: theorem statements, proofs, and parameter-domain material;
-    \item Appendix~J: supplementary conceptual background;
-    \item Appendix~K: supplementary image-noise and additional experiments.
-\end{itemize}
-
-\subsubsection*{Suggested heading revisions}
 \begin{quote}
 \texttt{
+A. Proof of Theorems 1 and 2 \\
+B. Proof of Theorem~3 (Shannon entropy sensitivity under replacement adjacency) \\
+C. Renyi entropy sensitivity \\
+D. Proof of Lemma~1 \\
+E. Proof of Lemma~3 and Corollary~1 \\
+F. Proof of Lemma~4 \\
+G. Proof of Lemma~2 \\
+H. Proof of Theorem~4 (Differential privacy of \(F\)) \\
+I. Sufficient parameter domain for Theorem~4 \\
 J. Supplementary conceptual background \\
 K. Supplementary image-noise and additional experiments
 }
 \end{quote}
-
-\paragraph{Reason}
-This makes the appendix hierarchy much clearer for reviewers.
-
-\subsection*{Priority 7: Tighten a Few Remaining Main-Text Sentences}
-
-\subsubsection*{Threat model}
-The threat-model paragraph is now mostly good.
-No major change is needed, but keep the wording that attribute inference is a relevant threat model rather than an experimentally benchmarked one.
-
-\subsubsection*{Experimental setup}
-The sentence
-\begin{quote}
-\texttt{All experiments were run with fixed random seed (e.g., 42) for reproducibility.}
-\end{quote}
-is fine, but if you want slightly more formal wording, you may use:
-\begin{quote}
-\texttt{Unless otherwise stated, experiments were run with a fixed random seed (e.g., 42) to reduce variability across repeated trials.}
-\end{quote}
-
-\subsubsection*{Real-data and multi-dataset paragraphs}
-These sections are now much stronger.
-The only remaining suggestion is to avoid sentences such as
-\begin{quote}
-\texttt{This illustrates that entropy-based DP release applies to real tabular and time-series data.}
-\end{quote}
-and instead use:
-\begin{quote}
-\texttt{This illustrates the applicability of the entropy-based DP release pipeline to real tabular and time-series data in the tested setting.}
-\end{quote}
-
-\subsection*{Priority 8: Final Conclusion Polish}
-
-\subsubsection*{Current status}
-The conclusion is already much improved and is close to final form.
-
-\subsubsection*{Final suggestion}
-Ensure that the first paragraph emphasizes only the two strongest theorem-level contributions:
-\begin{enumerate}
-    \item the entropy sensitivity bound for histogram release;
-    \item the synthetic-data mechanism \(F\) with formal \((\varepsilon,\delta)\)-DP guarantee.
-\end{enumerate}
-
-Keep RKHS/Wiener and image-noise material secondary or supplementary in the conclusion.
-
-\paragraph{Suggested final closing sentence}
-\begin{quote}
-\texttt{
-Future work includes stronger empirical coverage of attribute inference, broader multimodal or federated settings, and tighter analysis of finite-dimensional approximation effects in RKHS-based private release.
-}
-\end{quote}
-
-\subsection*{Final Bottom-Line Assessment}
-The manuscript is now in a final polishing stage rather than a repair stage.
-The core theoretical issues have largely been resolved, and the main remaining tasks are:
-\begin{enumerate}
-    \item fixing appendix cross-references in the main text,
-    \item making appendix titles and figure captions slightly more precise,
-    \item removing internal-drafting style summary material from the appendix,
-    \item tightening the discussion and final conclusion tone.
-\end{enumerate}
-
-Once these adjustments are made, the paper will look much more like a finished TIFS submission.
