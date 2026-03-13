@@ -1,6 +1,6 @@
 """
 Entropy sensitivity bound (Theorem 4): plot Delta_H bound vs dataset size n.
-Saves fig6.png to latex/fig/ for paper.
+Saves fig6.png to paper/fig/ for the paper.
 """
 import sys
 import os
@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from reaedp.entropy import entropy_sensitivity_bound
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
-FIG_DIR = os.path.join(ROOT, "latex", "fig")
+FIG_DIR = os.path.join(ROOT, "paper", "fig")
 
 
 def main(config=None):

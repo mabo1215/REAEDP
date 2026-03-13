@@ -1,5 +1,5 @@
 """
-对多张 CSV 分别跑熵+DP 实验，每张表生成一张图到 latex/fig/。
+对多张 CSV 分别跑熵+DP 实验，每张表生成一张图到 paper/fig/。
 配置中 "csv_entropy_all"."datasets" 为列表，每项: input, column, out_fig（可选）。
 若 data_dir 给定，input 会相对 data_dir 解析；否则相对项目根目录。
 """

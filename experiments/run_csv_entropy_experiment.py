@@ -1,7 +1,7 @@
 """
 Real-data experiment: load a CSV (e.g. y_amazon-google-large.csv), compute histogram
 and Shannon entropy, add DP noise to the histogram, and plot original vs private.
-Saves figure to latex/fig/ for the paper.
+Saves figure to paper/fig/ for the paper.
 """
 import sys
 import os
@@ -17,7 +17,7 @@ from reaedp.entropy import shannon_entropy, entropy_sensitivity_bound
 from reaedp.dp_mechanisms import laplace_mechanism
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
-FIG_DIR = os.path.join(ROOT, "latex", "fig")
+FIG_DIR = os.path.join(ROOT, "paper", "fig")
 
 
 def main(config=None):

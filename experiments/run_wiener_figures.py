@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from reaedp.wiener_kernel import generate_chi_square_process, private_rkhs_mean
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
-FIG_DIR = os.path.join(ROOT, "latex", "fig")
+FIG_DIR = os.path.join(ROOT, "paper", "fig")
 
 
 def main(config=None):

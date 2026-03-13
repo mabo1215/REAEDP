@@ -20,7 +20,7 @@ from reaedp.image_noise import (
 )
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
-FIG_DIR = os.path.join(ROOT, "latex", "fig")
+FIG_DIR = os.path.join(ROOT, "paper", "fig")
 
 
 def main(config=None):

@@ -9,7 +9,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
-FIG_DIR = os.path.join(ROOT, "latex", "fig")
+FIG_DIR = os.path.join(ROOT, "paper", "fig")
 
 
 def pass_test(k: int, t: int, gamma: float, rng: np.random.Generator) -> bool:

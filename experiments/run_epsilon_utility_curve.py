@@ -1,6 +1,6 @@
 """
 Privacy–utility tradeoff: PSNR and MAE vs epsilon for Laplace and Gaussian image noise.
-Saves fig5.png to latex/fig/ (for paper experiment section).
+Saves fig5.png to paper/fig/ for the paper.
 """
 import sys
 import os
@@ -19,7 +19,7 @@ from reaedp.image_noise import (
 )
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
-FIG_DIR = os.path.join(ROOT, "latex", "fig")
+FIG_DIR = os.path.join(ROOT, "paper", "fig")
 
 
 def main(config=None):
