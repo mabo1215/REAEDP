@@ -1,669 +1,376 @@
-\section*{Author Revision Action Plan for TIFS Submission}
+\section*{Reviewer Report for IEEE Transactions on Information Forensics and Security (TIFS)}
 
-\subsection*{Purpose of This Revision Plan}
-This revision plan converts the reviewer-style critiques into an \textbf{author-side implementation checklist}. The goal is not merely to polish wording, but to make the manuscript technically self-consistent, more focused, more reproducible, and better aligned with the standards of IEEE Transactions on Information Forensics and Security (TIFS).
+\subsection*{Summary}
+This manuscript studies privacy-preserving data release under differential privacy (DP) and proposes a framework named \textbf{REAEDP}, which combines: 
+(i) an entropy-sensitivity analysis for histogram statistics, 
+(ii) a synthetic-data release mechanism in a Wiener kernel / RKHS setting, and 
+(iii) empirical validation using baseline comparisons and membership inference evaluation.
+The topic is relevant to TIFS because it concerns mechanism design, privacy auditing, and secure data release.
 
-The current manuscript has a \textbf{promising topic} but still suffers from four structural weaknesses:
+That said, in its current form the paper does \emph{not yet reach the technical rigor, internal consistency, and evaluation depth expected by TIFS}. My main concerns are: 
 \begin{enumerate}
-    \item the paper currently tries to do too many things at once;
-    \item the theoretical assumptions are not fully self-consistent;
-    \item the mechanism definition is incomplete for a security journal;
-    \item the experiments do not yet fully validate the main security claims.
+    \item the theoretical assumptions and proof conditions are not fully self-consistent;
+    \item the mechanism definition is incomplete, which weakens reproducibility and the validity of the formal DP claim;
+    \item the empirical evaluation is fragmented and does not yet convincingly validate the central security claims;
+    \item the paper currently reads as a loose aggregation of histogram DP, RKHS release, image-noise utility plots, and Noisy-SGD discussion, rather than a sharply focused information forensics/security contribution.
 \end{enumerate}
-Accordingly, the revision must proceed in the order:
-\[
-\text{soundness} \rightarrow \text{mechanism completeness} \rightarrow \text{focus} \rightarrow \text{evaluation} \rightarrow \text{editorial cleanup}.
-\]
 
-\subsection*{Part I. Top-Level Revision Strategy}
+\subsection*{Overall Recommendation}
+\textbf{Recommendation: Reject in the current form, with encouragement to resubmit after major restructuring and re-verification of the theory.}
 
-\subsubsection*{A1. Decide the true center of the paper}
-Before editing any section, decide what the paper is \textbf{really about}. The current draft mixes:
+If the authors can repair the theorem statements/proofs, unify the mechanism, and substantially strengthen the security evaluation, the work may become suitable for a future submission.
+
+\subsection*{Strengths}
+\begin{enumerate}
+    \item The paper addresses a topic that is important and appropriate for TIFS: formally grounded privacy protection against inference risk.
+    \item The manuscript attempts to connect theory and practice through both proofs and attack-based evaluation.
+    \item The entropy-sensitivity perspective is potentially interesting if formalized rigorously and tied to a clearly defined release mechanism.
+    \item The paper includes an appendix with proof material, which is essential for a theory-oriented security journal.
+\end{enumerate}
+
+\subsection*{Major Concerns}
+
+\subsubsection*{1. The manuscript lacks a single, sharply defined security problem and mechanism}
+At present, the paper combines several components:
 \begin{itemize}
-    \item entropy sensitivity analysis,
-    \item histogram DP release,
-    \item synthetic-data release mechanism \(F\),
-    \item Wiener kernel / RKHS mean release,
-    \item image utility plots,
-    \item Noisy-SGD discussion.
+    \item histogram entropy sensitivity,
+    \item a synthetic-data release mechanism \(F\),
+    \item Wiener kernel / RKHS private mean release,
+    \item image-noise utility experiments,
+    \item conceptual discussion of Noisy-SGD.
 \end{itemize}
-This is too broad for a sharp TIFS paper.
+However, these components are not integrated into one coherent threat-model-to-mechanism-to-proof-to-evaluation pipeline.
 
-\paragraph{Author action.}
-Choose \textbf{one primary contribution line} and demote the rest to supporting or supplementary roles.
-
-\paragraph{Recommended choice.}
-The strongest candidate is:
+From a TIFS perspective, the paper should answer a precise question such as:
 \begin{quote}
-\textbf{A formally analyzed entropy-calibrated differentially private data release framework, with a complete mechanism definition and attack-based security evaluation.}
+``What is the exact release mechanism, under what adversarial view, with what formal guarantee, and how do the experiments validate that guarantee under realistic attacks?''
 \end{quote}
 
-\paragraph{What this means concretely.}
-\begin{itemize}
-    \item Keep entropy sensitivity as a theoretical foundation.
-    \item Keep mechanism \(F\) as the main release mechanism \emph{if} it can be fully specified and its theorem repaired.
-    \item Keep RKHS / Wiener material only if it is truly an instance of the same framework.
-    \item Remove, shorten, or move image-only utility discussion unless it directly instantiates the same mechanism.
-    \item Reduce Noisy-SGD to a brief remark or delete it unless it becomes part of the central theorem/experiment story.
-\end{itemize}
+Currently, the paper instead appears to present several loosely related DP examples. This weakens novelty, clarity, and scientific validity.
 
-\subsubsection*{A2. Rebuild the manuscript around one pipeline}
-The final paper should follow this exact logic:
-\[
-\text{Threat Model}
-\rightarrow
-\text{Mechanism Definition}
-\rightarrow
-\text{Privacy Theorem}
-\rightarrow
-\text{Utility / Sensitivity Analysis}
-\rightarrow
-\text{Attack Evaluation}.
-\]
-
-\paragraph{Author action.}
-Every section must serve this pipeline. If a section does not directly support one of these five stages, either shorten it drastically, move it to the appendix, or remove it.
-
-\subsection*{Part II. Highest-Priority Technical Repairs}
-
-\subsubsection*{B1. Fix the adjacency definition globally}
-This is the first issue that must be repaired because it affects theorem validity.
-
-\paragraph{Problem.}
-The manuscript text says add/remove adjacency, but the proof of the entropy theorem is written as if both adjacent datasets have the same size \(n\), which is a replacement/substitution model.
-
-\paragraph{Author action.}
-Choose \textbf{one and only one} adjacency definition:
-
-\paragraph{Option 1: add/remove adjacency}
-\[
-D \sim D' \iff D' = D \cup \{x\} \text{ or } D = D' \cup \{x\}.
-\]
-Then:
-\[
-|D'| = |D| \pm 1.
-\]
-
-\paragraph{Option 2: replacement adjacency}
-\[
-D \sim D' \iff |D|=|D'|=n,\quad |\{i:x_i \neq x_i'\}|=1.
-\]
-
-\paragraph{Recommended author choice.}
-If your entropy proof is easier to salvage under fixed dataset size, use \textbf{replacement adjacency}. This will likely make the theorem cleaner and easier to defend. However, if the synthetic mechanism theorem truly depends on add/remove adjacency, then the entropy proof must be rewritten accordingly.
-
-\paragraph{Required edits.}
-Once the choice is made:
+\paragraph{How to fix}
 \begin{enumerate}
-    \item revise the preliminaries;
-    \item revise Definition 1;
-    \item revise the entropy theorem statement;
-    \item revise the theorem proof in the appendix;
-    \item revise all later mechanisms and discussions that invoke adjacency.
+    \item Choose \textbf{one primary contribution axis}:
+    \begin{itemize}
+        \item either a new \emph{entropy-calibrated histogram release mechanism},
+        \item or a new \emph{RKHS/Wiener synthetic release mechanism},
+        \item but not several partially connected stories in the same main narrative.
+    \end{itemize}
+    \item Reorganize the paper into:
+    \[
+    \text{Threat Model} \rightarrow \text{Mechanism Definition} \rightarrow \text{Privacy Theorem} \rightarrow \text{Utility Theorem/Bound} \rightarrow \text{Attack Evaluation}.
+    \]
+    \item Move secondary demonstrations (e.g., image-noise plots) to supplementary material unless they directly instantiate the proposed mechanism.
 \end{enumerate}
 
-\paragraph{Non-negotiable rule.}
-The final manuscript must never mix the two adjacency models implicitly.
+\subsubsection*{2. The theoretical assumptions for Theorem 3 are internally inconsistent}
+The paper states an \emph{add/remove adjacency} model, but in the appendix proof of Theorem 3 it also states that the two adjacent datasets ``both have \(n\) records'' while differing by one record. This is inconsistent.
 
-\subsubsection*{B2. Rewrite the entropy sensitivity theorem with explicit assumptions}
-\paragraph{Problem.}
-The current theorem statement and proof do not cleanly expose the exact assumptions used.
+Under add/remove adjacency:
+\[
+|D'| = |D| \pm 1,
+\]
+so the normalization terms in entropy are generally different:
+\[
+H(D) = - \sum_i \frac{c_i}{n}\log_2 \frac{c_i}{n},
+\qquad
+H(D') = - \sum_i \frac{c'_i}{n\pm 1}\log_2 \frac{c'_i}{n\pm 1}.
+\]
+The current proof instead appears to use a \emph{substitution} viewpoint with the same \(n\), while the paper text repeatedly says add/remove adjacency.
 
-\paragraph{Author action.}
-State the theorem in a theorem-ready form such as:
+This is not a cosmetic issue. It changes the theorem statement, the proof, and the sensitivity value.
+
+\paragraph{How to fix}
+\begin{enumerate}
+    \item Decide whether the paper uses:
+    \begin{itemize}
+        \item \textbf{replacement adjacency} (\(|D|=|D'|=n\)), or
+        \item \textbf{add/remove adjacency} (\(|D'|=n\pm 1\)).
+    \end{itemize}
+    \item Restate Definition 1, Theorem 3, and all downstream mechanisms using that same adjacency notion.
+    \item If using add/remove adjacency, rewrite the proof with distinct denominators \(n\) and \(n+1\) (or \(n-1\)).
+    \item If using replacement adjacency, revise all claims that explicitly say add/remove adjacency.
+\end{enumerate}
+
+A more correct theorem template would be:
 \[
 \Delta_H
 =
 \max_{D \sim D'}
 \left|
-H(D)-H(D')
+-\sum_i p_i \log_2 p_i
++
+\sum_i p'_i \log_2 p'_i
 \right|,
 \]
-where
+with \(p_i = c_i/|D|\) and \(p'_i = c'_i/|D'|\), where the adjacency relation is explicitly fixed once and for all.
+
+\subsubsection*{3. Theorem 4 proof contains parameter assumptions that appear mathematically incompatible with the experiments}
+The proof of Lemma 4 / Theorem 4 uses an assumption equivalent to
 \[
-H(D) = -\sum_{i=1}^{m} p_i \log_2 p_i,
-\qquad
-p_i = \frac{c_i}{|D|}.
+\gamma > 1
+\quad \text{and} \quad
+1 \ge t \ge k,
 \]
-
-Then explicitly define:
-\begin{itemize}
-    \item what \(m\) is,
-    \item what the histogram bins are,
-    \item whether zero-probability terms are omitted or handled by continuity,
-    \item which adjacency relation is used.
-\end{itemize}
-
-\paragraph{Additional author strengthening.}
-Do not stop at a symbolic upper bound. Add an empirical tightness study:
+to justify inequalities involving
 \[
-r(n,m)=\frac{\widehat{\Delta H}}{\Delta_H^{\mathrm{bound}}}.
+1 + \frac{1}{k} < 1 + \frac{\gamma}{t} \le e^\varepsilon.
 \]
-This will help show that the theorem is not merely formal, but also informative.
+But the experiments use \(t=2\) and \(k \in \{10,20,30,50\}\), which implies
+\[
+t < k,
+\]
+not \(t \ge k\).
 
-\subsubsection*{B3. Repair the synthetic-mechanism DP theorem}
-\paragraph{Problem.}
-The current proof conditions involving \(k,t,\gamma,\varepsilon_0\) appear inconsistent with the actual experimental settings.
+This is a serious issue. A TIFS paper cannot claim a formal privacy theorem under one parameter regime while presenting experiments in another incompatible regime.
 
-\paragraph{Author action.}
-You must do a full theorem audit.
-
-\paragraph{Practical revision workflow.}
+\paragraph{How to fix}
 \begin{enumerate}
-    \item Copy the theorem and proof into a separate working document.
-    \item List all assumptions used explicitly or implicitly.
-    \item For every inequality, annotate the condition required for it to hold.
-    \item Compare those conditions against the actual experiment parameters.
-    \item Remove any proof line that depends on a parameter regime not used experimentally.
+    \item Audit the proof line by line and restate the exact admissible parameter domain.
+    \item Ensure that the theorem assumptions match the experimental settings.
+    \item If the current proof only holds for a restricted regime, either:
+    \begin{itemize}
+        \item revise the experiments to operate in that regime, or
+        \item derive a corrected theorem for the actual experimental regime.
+    \end{itemize}
+    \item Add a proposition explicitly listing the sufficient conditions:
+    \[
+    \mathcal{A} = \{(\varepsilon_0,\gamma,t,k): \text{all proof inequalities remain valid}\}.
+    \]
 \end{enumerate}
 
-\paragraph{What the final theorem should look like.}
-Instead of a vague theorem, write:
-\[
-\text{Mechanism } F \text{ is } (\varepsilon,\delta)\text{-DP provided } 
-(\varepsilon_0,\gamma,t,k)\in\mathcal{A},
-\]
-where \(\mathcal{A}\) is an explicitly defined admissible set.
+\subsubsection*{4. The mechanism \(F\) is not specified with enough precision for reproducibility or for theorem verification}
+The paper introduces a synthetic-data mechanism \(F\), but several objects remain insufficiently specified:
+\begin{itemize}
+    \item the exact universe \(U\),
+    \item the definition of partitions / cells,
+    \item the distribution \(p_s(y)\),
+    \item the distribution of \(L\) in the privacy test,
+    \item the computational procedure for generating a valid \(y\),
+    \item the termination and acceptance behavior when the privacy test fails repeatedly.
+\end{itemize}
 
-\paragraph{Why this matters.}
-A TIFS reviewer will immediately question any theorem whose proof uses a regime that the experiments violate. This is one of the most likely desk-rejection / reject triggers in the current draft.
+Without these details, the theorem is not fully auditable and the algorithm is not actually reproducible in a TIFS sense.
 
-\subsubsection*{B4. Fully specify the mechanism \(F\)}
-\paragraph{Problem.}
-The current manuscript gives the idea of the mechanism, but not yet a fully auditable security-journal specification.
-
-\paragraph{Author action.}
-Replace high-level prose by a complete algorithmic definition.
-
-\paragraph{Minimum required form.}
-The main paper should specify:
+\paragraph{How to fix}
+Replace the current high-level pseudocode by a complete specification:
 \begin{align}
-&\textbf{Input: } D,\varepsilon,\delta,\varepsilon_0,k,t,\gamma,\rho, \\
+&\textbf{Input: } D = \{x_1,\dots,x_n\},\ \varepsilon,\delta,\ k,t,\gamma,\rho, \\
 &\textbf{Seed selection: } s \sim \mathrm{Unif}(D), \\
 &\textbf{Candidate generation: } y \sim p_s(\cdot), \\
-&\textbf{Partition identification: } j = I_s(y), \\
-&\textbf{Acceptance test: } \mathcal{A}(D,s,y)=\mathbf{1}\{L \ge k-|C_j(D,y)|\}, \\
-&\textbf{Output rule: } F(D)=y \text{ if accepted, else resample.}
+&\textbf{Partition rule: } j = I_s(y), \\
+&\textbf{Acceptance rule: } \mathrm{Accept}(D,s,y) = \mathbf{1}\{L \ge k - |C_j(D,y)|\},
 \end{align}
+and explicitly define the law of \(L\), the form of \(p_s(y)\), and all tunable parameters.
 
-\paragraph{You must define explicitly:}
+Also provide:
 \begin{itemize}
-    \item the universe \(U\),
-    \item the support of \(y\),
-    \item the exact distribution \(p_s(y)\),
-    \item the rule \(I_s(y)\),
-    \item the law of \(L\),
-    \item whether there is a maximum number of resampling attempts,
-    \item what happens when repeated rejection occurs.
+    \item time complexity,
+    \item worst-case rejection complexity,
+    \item pseudocode for privacy-test evaluation,
+    \item implementation details sufficient to reproduce the theorem-related experiments.
 \end{itemize}
 
-\paragraph{Additional author action.}
-Also include:
+\subsubsection*{5. The novelty claim around Renyi entropy is currently weaker than the title suggests}
+The title foregrounds \emph{Renyi entropy}, yet the main text focuses primarily on Shannon entropy, while the Renyi result is delegated to the appendix as an explicit upper bound. In the current form, the Renyi component feels ancillary rather than central.
+
+If Renyi entropy is part of the paper title, it should play a direct role in:
 \begin{itemize}
-    \item algorithm pseudocode,
-    \item runtime discussion,
-    \item parameter meaning table,
-    \item implementation notes sufficient for reproduction.
+    \item the mechanism design,
+    \item the privacy analysis,
+    \item or the experimental calibration strategy.
 \end{itemize}
 
-\subsection*{Part III. Manuscript Restructuring by Section}
-
-\subsubsection*{C1. Title}
-\paragraph{Problem.}
-The current title is overloaded and likely overstates the operational role of Renyi entropy.
-
-\paragraph{Author action.}
+\paragraph{How to fix}
 Either:
 \begin{enumerate}
-    \item make Renyi entropy central in the method and experiments; or
-    \item remove it from the title.
+    \item make Renyi entropy central by using it in the mechanism calibration and experiments, e.g.,
+    \[
+    \Delta H_\alpha \le \frac{2|\alpha|}{|1-\alpha|\ln 2}\cdot \frac{1}{n},
+    \]
+    and show how varying \(\alpha\) changes release behavior; 
 \end{enumerate}
-
-\paragraph{Recommended author strategy.}
-Unless you add new experiments showing how \(\alpha\) changes calibration or risk, it is safer to \textbf{remove Renyi entropy from the title} and keep it as an appendix or secondary theorem.
-
-\paragraph{Possible title style.}
-\begin{quote}
-\textbf{Entropy-Calibrated Differentially Private Data Release with Formal Guarantees and Attack-Based Evaluation}
-\end{quote}
-
-\subsubsection*{C2. Abstract}
-\paragraph{Problem.}
-The abstract currently tries to summarize too many contributions at once.
-
-\paragraph{Author action.}
-Rewrite the abstract into exactly five sentences:
+or
 \begin{enumerate}
-    \item problem and threat model;
-    \item proposed mechanism;
-    \item main theorem;
-    \item evaluation protocol;
-    \item main result and significance.
+    \setcounter{enumi}{1}
+    \item remove Renyi entropy from the title and reposition it as a supplementary theoretical extension.
 \end{enumerate}
 
-\paragraph{Recommended rewrite logic.}
-Do not list several semi-independent innovations. Instead present one coherent story:
-\begin{quote}
-We study \(\cdots\); we propose \(\cdots\); we prove \(\cdots\); we evaluate under \(\cdots\); results show \(\cdots\).
-\end{quote}
+\subsubsection*{6. The empirical evaluation does not yet validate the central security claim at TIFS level}
+The experiments are broad but not deep enough. In particular:
 
-\subsubsection*{C3. Introduction}
-\paragraph{Problem.}
-The introduction currently opens too many fronts.
+\paragraph{(a) Membership inference evaluation is too weak}
+The paper states that the adversary sees one release from \(D\) or \(D' = D \cup \{x\}\) and guesses which one generated the output. This is a very limited attack model and does not reflect stronger inference settings commonly expected in privacy/security evaluation.
 
-\paragraph{Author action.}
-Rewrite the introduction around one core question:
-\begin{quote}
-How can we design a differentially private release mechanism whose sensitivity is formally controlled, whose algorithm is completely specified, and whose security is validated against inference attacks?
-\end{quote}
-
-\paragraph{Required introduction structure.}
-\begin{enumerate}
-    \item motivate the privacy/security problem;
-    \item explain why standard release is risky;
-    \item identify the gap in existing methods;
-    \item state your mechanism and theorem;
-    \item list contributions that map one-to-one to later sections.
-\end{enumerate}
-
-\paragraph{Important author rule.}
-Every contribution listed in the introduction must later appear in:
+There is no detailed specification of:
 \begin{itemize}
-    \item a dedicated method subsection,
-    \item a theorem or formal proposition,
-    \item and an experiment or analysis.
-\end{itemize}
-
-\subsubsection*{C4. Related Work}
-\paragraph{Problem.}
-The related work is too broad and not competitive enough for TIFS.
-
-\paragraph{Author action.}
-Split related work into four focused blocks:
-\begin{enumerate}
-    \item DP data release / synthetic data release;
-    \item entropy-based privacy or sensitivity analysis;
-    \item RKHS or function-space privacy methods;
-    \item attack-based privacy auditing.
-\end{enumerate}
-
-\paragraph{Required addition.}
-Add a comparison table:
-\[
-\begin{array}{l|c|c|c|c|c}
-\text{Method} & \text{Release type} & \text{Formal DP} & \text{Entropy role} & \text{Attack eval.} & \text{Difference}\\
-\hline
-\text{Prior 1} & & & & & \\
-\text{Prior 2} & & & & & \\
-\text{This work} & & & & &
-\end{array}
-\]
-
-\paragraph{Author target.}
-The reader should understand in one page:
-\begin{quote}
-What is closest to this paper, and exactly what is different here?
-\end{quote}
-
-\subsubsection*{C5. Threat Model}
-\paragraph{Problem.}
-Threats are discussed somewhat broadly, but only some are actually evaluated.
-
-\paragraph{Author action.}
-Separate the threats formally:
-\begin{align}
-&\text{Membership inference: determine whether } x \in D, \\
-&\text{Attribute inference: infer hidden sensitive attributes}, \\
-&\text{Record linkage: match released samples to known identities}.
-\end{align}
-
-\paragraph{Required clarification.}
-Explicitly state:
-\begin{itemize}
-    \item which threat is formally bounded by DP;
-    \item which threat is directly evaluated in experiments;
-    \item which threat remains future work.
-\end{itemize}
-
-\paragraph{Recommended author choice.}
-If only MIA is truly evaluated now, then narrow the claims and do not implicitly claim complete defense against all inference attacks.
-
-\subsubsection*{C6. Preliminaries and Notation}
-\paragraph{Problem.}
-This section currently does not fully protect the later theory from ambiguity.
-
-\paragraph{Author action.}
-Add a notation table including:
-\[
-D,\ D',\ n,\ m,\ c_i,\ p_i,\ H,\ H_\alpha,\ \varepsilon,\ \delta,\ \varepsilon_0,\ k,\ t,\ \gamma,\ \rho,\ F,\ U.
-\]
-
-\paragraph{Additional action.}
-Define every mechanism domain and codomain before theorems begin. This will reduce proof ambiguity and improve reviewer confidence.
-
-\subsubsection*{C7. Entropy Theorem Section}
-\paragraph{Problem.}
-The result may be useful, but it needs a cleaner presentation.
-
-\paragraph{Author action.}
-Organize the section as:
-\begin{enumerate}
-    \item setup and histogram model;
-    \item theorem statement;
-    \item interpretation;
-    \item proof deferred to appendix;
-    \item numerical tightness study.
-\end{enumerate}
-
-\paragraph{Recommended improvement.}
-Add one paragraph explicitly explaining why entropy sensitivity matters operationally for your release mechanism.
-
-\subsubsection*{C8. Renyi Entropy Section}
-\paragraph{Problem.}
-At present this section is mathematically interesting but operationally weak.
-
-\paragraph{Author action.}
-Choose one of the following:
-\begin{itemize}
-    \item \textbf{Strong option:} add experiments varying \(\alpha\) and show what Renyi sensitivity contributes in practice;
-    \item \textbf{Safe option:} shorten the section and move most details to the appendix.
-\end{itemize}
-
-\paragraph{Recommended author choice.}
-If time is limited, use the safe option. Keep the result, but do not let it dominate the title or abstract.
-
-\subsubsection*{C9. Mechanism Section}
-\paragraph{Problem.}
-This section should be the heart of the paper, but currently reads more like a sketch.
-
-\paragraph{Author action.}
-Turn it into a complete method section with:
-\begin{itemize}
-    \item intuitive overview,
-    \item formal definition,
-    \item algorithm box,
-    \item parameter table,
-    \item theorem pointer,
-    \item practical implementation note.
-\end{itemize}
-
-\paragraph{Author note.}
-This is the section that most directly determines whether TIFS reviewers perceive the work as serious and reproducible.
-
-\subsubsection*{C10. RKHS / Wiener Section}
-\paragraph{Problem.}
-This material is mathematically interesting but currently insufficiently integrated.
-
-\paragraph{Author action.}
-Decide whether this section is:
-\begin{enumerate}
-    \item the main instantiation of the mechanism; or
-    \item a secondary example.
-\end{enumerate}
-
-\paragraph{If it is main.}
-You must explain:
-\begin{itemize}
-    \item why RKHS is needed,
-    \item how it changes the mechanism,
-    \item how \(\rho\) affects privacy and utility,
-    \item how the experiments directly validate this part.
-\end{itemize}
-
-\paragraph{If it is secondary.}
-Move most of it to the appendix or supplementary material.
-
-\subsubsection*{C11. Noisy-SGD Material}
-\paragraph{Problem.}
-This currently weakens focus.
-
-\paragraph{Author action.}
-Unless Noisy-SGD is directly used in the mechanism or experiments, remove it from the main contribution narrative.
-
-\paragraph{Recommended author choice.}
-Reduce it to one short paragraph in discussion/future work.
-
-\subsection*{Part IV. Experimental Revision Plan}
-
-\subsubsection*{D1. Reorganize the experimental section}
-\paragraph{Author action.}
-Split experiments into three blocks:
-\begin{enumerate}
-    \item \textbf{Bound / theorem validation},
-    \item \textbf{Utility evaluation},
-    \item \textbf{Security attack evaluation}.
-\end{enumerate}
-
-\paragraph{Why.}
-This makes the experimental logic match the paper logic:
-\[
-\text{theorem} \rightarrow \text{usefulness} \rightarrow \text{security}.
-\]
-
-\subsubsection*{D2. Add theorem-aligned empirical validation}
-\paragraph{Author action.}
-Add experiments that directly test the key theoretical claims.
-
-\paragraph{For entropy theorem.}
-Estimate
-\[
-\widehat{\Delta H}
-=
-\max_{D \sim D'} |H(D)-H(D')|
-\]
-on controlled synthetic examples and compare it against the bound.
-
-\paragraph{For mechanism theorem.}
-Estimate empirical privacy loss:
-\[
-L(o)=\log\frac{\Pr[F(D)=o]}{\Pr[F(D')=o]}.
-\]
-Then show whether the empirical distribution is compatible with the claimed \((\varepsilon,\delta)\) guarantee.
-
-\paragraph{This is highly recommended.}
-It will substantially strengthen the paper because it closes the loop between theorem and experiment.
-
-\subsubsection*{D3. Strengthen attack evaluation}
-\paragraph{Problem.}
-Current attack evaluation is too weak for TIFS.
-
-\paragraph{Author action.}
-For MIA, explicitly define:
-\begin{align}
-& o \leftarrow F(D) \text{ or } F(D'), \\
-& a(o) \in \mathbb{R}, \\
-& \hat{b}=\mathbf{1}\{a(o)\ge \tau\}.
-\end{align}
-
-Then report:
-\begin{itemize}
-    \item attack accuracy,
-    \item balanced accuracy,
-    \item ROC-AUC,
+    \item attack features,
+    \item decision rule,
+    \item number of repeated trials,
     \item confidence intervals,
-    \item standard deviation across repeated runs.
+    \item hypothesis testing,
+    \item comparison against stronger attack baselines.
 \end{itemize}
 
-\paragraph{Add stronger baselines.}
-At minimum:
+\paragraph{How to fix}
+Add a rigorous attack protocol:
+\begin{enumerate}
+    \item Define the attacker observation \(o\) and attack score \(a(o)\).
+    \item Report attack AUC, balanced accuracy, and confidence intervals over repeated runs.
+    \item Compare against at least:
+    \begin{itemize}
+        \item threshold-based likelihood attack,
+        \item shadow-model style attack if applicable,
+        \item nearest-neighbor/linkage style attack for synthetic release.
+    \end{itemize}
+    \item Report variance across seeds and datasets.
+\end{enumerate}
+
+\paragraph{(b) Utility metrics are partially misaligned with the main contribution}
+If the main claim is about tabular-data release and entropy-calibrated privacy, then image PSNR/MAE and synthetic process mean plots are only indirectly relevant. They currently dilute the paper rather than strengthen it.
+
+\paragraph{How to fix}
+Prioritize application-aligned metrics such as:
 \begin{itemize}
-    \item a threshold attack,
-    \item a nearest-neighbor / linkage attack,
-    \item a stronger task-specific inference attack if possible.
+    \item marginal distribution fidelity,
+    \item downstream task accuracy on privatized data,
+    \item coverage/calibration of synthetic data,
+    \item distance between real and synthetic distributions,
+    \item record linkage resistance,
+    \item attribute inference resistance.
 \end{itemize}
 
-\subsubsection*{D4. Strengthen utility metrics}
-\paragraph{Problem.}
-Some current metrics are too indirect.
+For histogram release, report:
+\[
+\mathrm{MAE}_{\text{count}},\quad
+|H_{\mathrm{orig}} - H_{\mathrm{noisy}}|,\quad
+D_{\mathrm{KL}}(p\| \tilde p),\quad
+\mathrm{TV}(p,\tilde p).
+\]
 
-\paragraph{Author action.}
-Prioritize metrics that align directly with your release goal:
-\begin{align}
-&\mathrm{MAE}_{\mathrm{count}}, \\
-&|H_{\mathrm{orig}}-H_{\mathrm{priv}}|, \\
-&D_{\mathrm{KL}}(p\|\tilde p), \\
-&\mathrm{TV}(p,\tilde p), \\
-&\text{downstream accuracy}, \\
-&\text{linkage success rate}, \\
-&\text{attribute inference accuracy}.
-\end{align}
+\paragraph{(c) Baselines are too limited}
+Comparing only Laplace and Gaussian mechanisms is not enough for a TIFS paper unless the contribution is purely analytical. Since the paper claims a practical release framework, it should compare against stronger privacy-preserving release baselines.
 
-\paragraph{Recommended author choice.}
-If the paper is mainly about general DP release rather than image-specific release, move PSNR/SSIM/MAE image plots to a secondary or supplementary position.
-
-\subsubsection*{D5. Improve baselines}
-\paragraph{Problem.}
-Laplace and Gaussian alone are not enough.
-
-\paragraph{Author action.}
-Add baselines from the nearest relevant literature:
+\paragraph{How to fix}
+Add comparisons to relevant baselines such as:
 \begin{itemize}
-    \item standard DP histogram release,
-    \item exponential mechanism if relevant,
-    \item DP synthetic release methods,
-    \item kernel-based privatization baselines if RKHS remains central.
+    \item DP histogram release with standard calibration,
+    \item exponential mechanism where applicable,
+    \item PATE/DP-SGD-inspired release or learning baselines if the paper claims relevance to ML,
+    \item existing DP synthetic data generation methods,
+    \item kernel-based privatization methods from the literature.
 \end{itemize}
 
-\paragraph{Author note.}
-You do not necessarily need many baselines, but you do need the \textbf{right} baselines.
+\subsubsection*{7. The relation between theorem, proof, and experiments is overstated}
+The paper often claims that the experiments ``validate'' the theorem. However, many plots only illustrate qualitative consistency with the theorem rather than directly test the theorem's assumptions or tightness.
 
-\subsection*{Part V. Writing and Presentation Repairs}
+For example, plotting a bound versus \(n\) does not by itself validate that the theorem is tight or that the mechanism is optimally calibrated.
 
-\subsubsection*{E1. Unify theorem numbering and contribution mapping}
-\paragraph{Problem.}
-The theorem numbering and contribution mapping are currently inconsistent across materials.
-
-\paragraph{Author action.}
-Perform a full consistency check:
+\paragraph{How to fix}
+Use theorem-aligned experiments:
 \begin{enumerate}
-    \item title,
-    \item abstract,
-    \item introduction contributions,
-    \item theorem numbering,
-    \item appendix numbering,
-    \item conclusion claims.
+    \item Numerically estimate
+    \[
+    \widehat{\Delta H}
+    =
+    \max_{D \sim D'} |H(D)-H(D')|
+    \]
+    over exhaustive or randomized adjacent pairs for controlled synthetic examples.
+    \item Compare the empirical maximum with the theoretical upper bound.
+    \item Report the ratio
+    \[
+    r(n,m) = \frac{\widehat{\Delta H}}{\Delta_H^{\text{bound}}},
+    \]
+    to quantify tightness.
+    \item For Theorem 4, numerically estimate the privacy loss random variable
+    \[
+    L(o) = \log \frac{\Pr[F(D)=o]}{\Pr[F(D')=o]}
+    \]
+    and verify whether empirical tails are consistent with the claimed \((\varepsilon,\delta)\).
 \end{enumerate}
 
-\paragraph{Non-negotiable rule.}
-Every theorem mentioned in the introduction must exist in the main text with the same numbering and same role.
-
-\subsubsection*{E2. Remove overclaims}
-\paragraph{Problem.}
-Some claims currently sound broader than the evidence supports.
-
-\paragraph{Author action.}
-Tone down claims such as:
+\subsubsection*{8. Related work is underdeveloped for a TIFS submission}
+The related work section is high-level and largely generic. It does not sufficiently position the paper against:
 \begin{itemize}
-    \item broad protection against all inference attacks,
-    \item strong practical superiority without enough baselines,
-    \item centrality of Renyi entropy if it remains auxiliary,
-    \item unified framework if the paper remains multi-threaded.
+    \item DP synthetic data release,
+    \item privacy auditing,
+    \item entropy-based leakage measures,
+    \item kernel/function-space privatization,
+    \item attack-based privacy evaluation.
 \end{itemize}
 
-\subsubsection*{E3. Improve figure logic}
-\paragraph{Author action.}
-Reorder figures so they support one argument sequence:
-\begin{enumerate}
-    \item theorem intuition / bound figure,
-    \item mechanism diagram,
-    \item utility tradeoff figure,
-    \item attack evaluation figure.
-\end{enumerate}
+A TIFS paper needs sharper comparative positioning:
+\begin{quote}
+``What exactly is new here relative to prior DP release methods, prior entropy-based analyses, and prior privacy auditing frameworks?''
+\end{quote}
 
-\paragraph{For each figure, answer in the caption:}
+\paragraph{How to fix}
+Add a structured comparison table with columns:
+\[
+\text{Method},\ 
+\text{Data Type},\ 
+\text{Formal DP Guarantee},\ 
+\text{Synthetic Release},\ 
+\text{Entropy-Based Calibration},\ 
+\text{Attack Evaluation},\ 
+\text{This Paper's Difference}.
+\]
+
+\subsubsection*{9. Writing quality and consistency are below TIFS expectations}
+There are multiple signs that the manuscript still needs substantial editorial consolidation:
 \begin{itemize}
-    \item what claim does this support?
-    \item does it validate theory, utility, or security?
-    \item why is this metric relevant?
+    \item inconsistent theorem numbering across manuscript-related materials,
+    \item abrupt transitions between topics,
+    \item non-standard subsection labels,
+    \item awkward phrasing and grammatical issues,
+    \item claims such as ``tight up to constants'' without adequate support,
+    \item appendix/main text cross-referencing that needs cleanup.
 \end{itemize}
 
-\subsubsection*{E4. Rewrite the conclusion conservatively}
-\paragraph{Author action.}
-The conclusion should reflect only what has been formally shown and empirically supported.
-
-\paragraph{Recommended conclusion logic.}
+\paragraph{How to fix}
 \begin{enumerate}
-    \item restate the problem;
-    \item restate the mechanism;
-    \item summarize the formal guarantee;
-    \item summarize the strongest experimental findings;
-    \item state limitations honestly;
-    \item suggest future work.
+    \item Perform a full consistency audit of theorem numbering, symbols, and section references.
+    \item Tighten the prose so every section directly supports the main theorem and threat model.
+    \item Remove speculative or weakly supported claims.
+    \item Add a notation sanity-check pass, ensuring every symbol is defined once and used consistently.
 \end{enumerate}
 
-\subsection*{Part VI. Appendix Repair Plan}
-
-\subsubsection*{F1. Rewrite the appendix after the main paper is stabilized}
-\paragraph{Author action.}
-Do \textbf{not} try to patch the appendix before you finalize:
-\begin{itemize}
-    \item adjacency,
-    \item theorem statements,
-    \item parameter assumptions.
-\end{itemize}
-
-\paragraph{Reason.}
-At the moment, the appendix exposes the inconsistencies rather than resolving them.
-
-\subsubsection*{F2. Use a proof architecture}
-\paragraph{Author action.}
-Rewrite proofs as:
+\subsection*{Minor Comments}
 \begin{enumerate}
-    \item assumptions;
-    \item lemma;
-    \item intermediate bound;
-    \item theorem conclusion;
-    \item interpretation.
+    \item The title is long and currently over-promises relative to the validated scope.
+    \item If Renyi entropy is not central in the final version, the title should be simplified.
+    \item The Noisy-SGD subsection appears tangential unless the manuscript includes a theorem or experiment directly using it.
+    \item The image-noise section would be better removed or moved to supplementary material unless the paper targets image release specifically.
+    \item The statement that larger \(\rho\) improves utility while remaining private needs a more explicit derivation and a clearer risk discussion.
+    \item The threat model should distinguish clearly between:
+    \[
+    \text{membership inference},\quad
+    \text{attribute inference},\quad
+    \text{record linkage},
+    \]
+    and state which are formally bounded by DP and which are only empirically evaluated.
 \end{enumerate}
 
-\paragraph{Recommended proof style.}
-Avoid compressed proof jumps. TIFS reviewers respond much better to explicit proof scaffolding than to elegant but fragile shortcuts.
-
-\subsection*{Part VII. Priority-Ordered Execution Checklist}
-
-\subsubsection*{Priority 1: Soundness}
+\subsection*{Concrete Revision Checklist}
 \begin{enumerate}
-    \item Fix adjacency globally.
-    \item Rewrite the entropy theorem accordingly.
-    \item Repair the synthetic DP theorem so assumptions match experiments.
+    \item \textbf{Unify adjacency}: choose either replacement adjacency or add/remove adjacency and revise all theorem statements and proofs accordingly.
+    \item \textbf{Repair Theorem 4}: ensure the proof assumptions match the actual parameter regime used in experiments.
+    \item \textbf{Fully define \(F\)}: specify \(U\), \(p_s(y)\), partitioning, privacy-test distribution, and algorithm termination.
+    \item \textbf{Sharpen the contribution}: reduce the manuscript to one central mechanism and one central security claim.
+    \item \textbf{Strengthen evaluation}: add stronger MIA/linkage/attribute-inference attacks, repeated trials, confidence intervals, and stronger baselines.
+    \item \textbf{Align metrics with contribution}: prioritize release fidelity and security metrics over loosely related image-quality metrics.
+    \item \textbf{Upgrade related work}: provide a comparative literature table and precise novelty positioning.
+    \item \textbf{Improve editorial quality}: fix notation, numbering, grammar, cross-references, and theorem consistency.
 \end{enumerate}
 
-\subsubsection*{Priority 2: Mechanism completeness}
-\begin{enumerate}
-    \item Fully define \(F\).
-    \item Add complete pseudocode and parameter table.
-    \item Clarify rejection/resampling/runtime behavior.
-\end{enumerate}
+\subsection*{Suggested Reframing for a Stronger Resubmission}
+A much stronger version of this work would be:
 
-\subsubsection*{Priority 3: Contribution focus}
-\begin{enumerate}
-    \item Choose the central contribution.
-    \item Reduce side stories.
-    \item Demote weakly integrated material.
-\end{enumerate}
+\begin{quote}
+\textbf{A single entropy-calibrated private release mechanism for tabular/synthetic data, with a fully specified algorithm, a corrected formal \((\varepsilon,\delta)\)-DP theorem, empirical privacy-loss verification, and strong attack-based evaluation against membership/linkage/attribute inference adversaries.}
+\end{quote}
 
-\subsubsection*{Priority 4: Experimental credibility}
-\begin{enumerate}
-    \item Add theorem-aligned validation.
-    \item Strengthen MIA and add stronger attack baselines.
-    \item Improve utility metrics and comparison baselines.
-\end{enumerate}
+That would be significantly closer to the level expected by TIFS.
 
-\subsubsection*{Priority 5: Editorial cleanup}
-\begin{enumerate}
-    \item Fix title/abstract/introduction alignment.
-    \item Fix numbering and notation.
-    \item Remove overclaims.
-    \item Rewrite conclusion conservatively.
-\end{enumerate}
-
-\subsection*{Part VIII. Final Author Guidance}
-The manuscript does not currently fail because the topic is weak. It fails because the current version does not yet present one technically consolidated paper. The most effective revision strategy is therefore \textbf{not} to add more content everywhere, but to:
-\begin{enumerate}
-    \item reduce scope,
-    \item repair theorem soundness,
-    \item fully define the mechanism,
-    \item rebuild experiments around the central security claim.
-\end{enumerate}
-
-If these four goals are achieved, the paper will be substantially stronger and much closer to TIFS expectations.
+\subsection*{Final Verdict}
+\textbf{The paper is promising in topic and ambition, but not yet sound enough in theorem consistency, mechanism specification, and security evaluation for publication in TIFS.}
