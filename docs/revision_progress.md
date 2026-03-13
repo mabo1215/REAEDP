@@ -1,11 +1,11 @@
 # 审稿意见修改进度（Top-Tier Journal Style Review）
 
 **更新日期：** 2026-03  
-**当前进度：** 约 **100%**（已完成 20 条）
+**当前进度：** 约 **100%**（已完成 31 条）
 
 ---
 
-## 一、已完成的审稿意见（共 20 条）
+## 一、已完成的审稿意见（共 31 条）
 
 每条包含：**序号 | 状态 | 审稿意见概要 | 修改说明**
 
@@ -31,16 +31,27 @@
 | **18** | 已改 | **Theorem 4 / Lemma 4 的参数域与实验设置需一致** | 在 `appendix_main.tex` 的 “Parameter domain for $(\varepsilon_0,\gamma,t,k)$” 小节末尾增加 “Verification that reported experiments use parameters in $\mathcal{A}$” 段落：逐一说明 Figure~\ref{fig:generalpic} 使用的 $t=2$、$k \in \{10,20,30,50\}$、$\gamma>1$ 及 $|D| \ge 50$ 满足 $\gamma>1$、$t \le k$、$k \le |D|$ 与 Lemma 要求，故落在 $\mathcal{A}$ 内；并注明其余未列出的 $\mathcal{F}$ 配置仅作经验性探索、不声称实例化 Theorem~\ref{thm5}。 |
 | **19** | 已改 | **实验强度不足（攻击与基线）** | 补强 MIA：在 `run_mia_evaluation.py` 中增加 AUC、5 次重复运行及 95\% CI、linkage-style 攻击（基于 L2 距离的“哪个参考发布更近”猜测）；图中报告 MIA accuracy（带 CI）、MIA AUC、linkage accuracy。增加 2 个 DP synthetic 基线：在 `run_baseline_comparison.py` 中增加 “DP synthetic (Laplace)” 与 “DP synthetic (Gaussian)”（对 count 加噪后归一化再 multinomial 抽样得到合成直方图），与 Laplace、Gaussian 一起画熵误差与 MAE；正文 Baseline 与 Discussion 已更新。 |
 | **20** | 已改 | **“实验验证定理”的表述与设计** | 在实验中增加小规模、严格可控的 synthetic 实验：新增 `run_delta_h_empirical.py`，对相邻直方图对 $(D,D')$ 显式枚举或随机采样，估计 $\widehat{\Delta H} = \max_{D\sim D'} |H(D)-H(D')|$，与理论上界 $\Delta_H$ 比较；输出 `fig_delta_h_empirical.png` 与 `data/delta_h_empirical.csv`。正文新增 “Empirical entropy sensitivity ($\widehat{\Delta H}$ vs.\ bound)” 小节与 Figure~\ref{fig:delta_h_empirical}，说明比值 $<1$、行为与 Theorem~\ref{thm4} 一致；Discussion 中补充 (1b) 对应结论。 |
+| **21** | 已改 | **P1 全局邻接表述** | Section III-A 改为明确两种邻接：Theorem~\ref{thm4}（熵敏感度）用 replacement；Theorem~\ref{thm5}（机制 $\mathcal{F}$）用 add/remove；每处定理写明所用邻接。 |
+| **22** | 已改 | **P2 Table II** | Table~\ref{tab:notation} 中 $D,D'$ 一行改为：Theorem~\ref{thm4} 用 replacement；Theorem~\ref{thm5} 用 add/remove。 |
+| **23** | 已改 | **P3 Theorem 4 限定 replacement** | 定理标题改为 “Shannon entropy sensitivity under replacement adjacency”；陈述中写明 assume $D,D'$ adjacent under replacement (Section III-A)。 |
+| **24** | 已改 | **P4 Theorem 5 限定 add/remove** | 定理标题改为 “Differential privacy of $\mathcal{F}$ under add/remove adjacency”；陈述中写明 $D'=D\cup\{d'\}$ or $D=D'\cup\{d'\}$ 及 Appendix 假设。 |
+| **25** | 已改 | **P5 威胁模型与实验范围** | 威胁模型段落明确：形式分析约束一般泄漏；显式实验仅针对 MIA 与 linkage-style；attribute inference 不在本版做 benchmark。 |
+| **26** | 已改 | **P6 弱化过度声称** | 摘要/引言/结论：“unified”→“differential privacy framework”，“reproducible”→“algorithmic implementation/pipeline”；讨论中 “consistent with $(\varepsilon,\delta)$-DP”→“consistent with the expected privacy behavior under the tested attack setting”。 |
+| **27** | 已改 | **P7 附录去遗留** | 附录中 Noisy-SGD 与 performance measurement 改为一句概念性提及；图像实验标为 “Supplementary: Image noise utility”。 |
+| **28** | 已改 | **P8 去掉 rebuttal 式叙述** | 实验开头 “figures directly support contributions (i)(ii)(iii)” 改为四部分结构描述（privacy-test, utility comparison, theorem-oriented validation, attack-based evaluation）。 |
+| **29** | 已改 | **P9 弱化 Figure 1/4/7 解读** | Fig 1（generalpic）：强调隐私检验行为，正式保证由 Theorem 5 给出；Fig 4（entropy_bound/delta_h_empirical）：表述为 below the bound in the tested regime；Fig 7（mia）：表述为 consistent with stronger privacy at smaller $\varepsilon$。 |
+| **30** | 已改 | **P10 Table I 措辞** | Related work 比较表 This work 行 “repro.\ algorithm”→“algorithmic implementation + baselines + attack evaluation”。 |
+| **31** | 已改 | **P11 附录标题与结构** | 参数域小节标题改为 “Sufficient parameter domain for Theorem~\ref{thm5}”；Noisy-SGD/图像移入 “Supplementary material” 并标注。 |
 
 ---
 
 ## 二、未完成 / 部分完成的审稿意见（共 1 条）
 
-当前仍有若干审稿意见只部分完成或尚未完全达到 TIFS 评审要求。每条包含：**编号 | 状态 | 审稿意见概要 | 已完成修改 | 未做/准备做 | 下一步建议**。
+当前仍有若干审稿意见只部分完成或尚未完全达到 TIFS 评审要求。格式：**编号 | 状态 | 审稿意见概要 | 已完成修改 | 未做/准备做 | 下一步建议**。
 
 | 编号 | 状态 | 审稿意见概要 | 已完成修改 | 未做/准备做 | 下一步建议 |
 |------|------|--------------|------------|-------------|------------|
-| **9** | 部分完成 | 写作质量与一致性 | 已统一定理/引理编号和大部分符号（如邻接模型、$\mathbb{P}\mathrm{r}$、$\Delta_H$），修正了明显的 cross-ref 错误，并对多行公式做了换行处理；Theorem 4 等的措辞更谨慎。 | 仍未进行一次“从头到尾”的 editorial pass：比如逐一检查所有符号只定义一次且使用一致、清理所有可能的弱证据性语句、检查 main/appendix 所有引用是否无残留 `??` 等。 | 在投稿前留一次专门的 editorial round：仅关注符号、编号、引用、语法与用语强度（删除/弱化 speculative claims），可结合编译 log 中的 Warning 一起清理。 |
+| **9** | 部分完成 | **写作质量与一致性** | 已统一定理/引理编号和大部分符号，修正明显 cross-ref，多行公式换行；Theorem 4 等措辞更谨慎。 | 仍未做一次全稿 editorial pass：符号只定义一次且一致、清理弱证据句、检查 main/appendix 引用无 `??`。 | 投稿前做一次 editorial round：符号、编号、引用、语法与用语强度；结合编译 log Warning 清理。 |
 
 ---
 
