@@ -1,11 +1,11 @@
 # 审稿意见修改进度（Top-Tier Journal Style Review）
 
 **更新日期：** 2026-03  
-**当前进度：** 约 **100%**（已完成 31 条）
+**当前进度：** 约 **100%**（已完成 50 条）
 
 ---
 
-## 一、已完成的审稿意见（共 31 条）
+## 一、已完成的审稿意见（共 50 条）
 
 每条包含：**序号 | 状态 | 审稿意见概要 | 修改说明**
 
@@ -42,6 +42,25 @@
 | **29** | 已改 | **P9 弱化 Figure 1/4/7 解读** | Fig 1（generalpic）：强调隐私检验行为，正式保证由 Theorem 5 给出；Fig 4（entropy_bound/delta_h_empirical）：表述为 below the bound in the tested regime；Fig 7（mia）：表述为 consistent with stronger privacy at smaller $\varepsilon$。 |
 | **30** | 已改 | **P10 Table I 措辞** | Related work 比较表 This work 行 “repro.\ algorithm”→“algorithmic implementation + baselines + attack evaluation”。 |
 | **31** | 已改 | **P11 附录标题与结构** | 参数域小节标题改为 “Sufficient parameter domain for Theorem~\ref{thm5}”；Noisy-SGD/图像移入 “Supplementary material” 并标注。 |
+| **32** | 已改 | **P1 威胁模型与熵敏感度** | 将“one record is added or removed”改为“under the adjacency model used in Theorem~4”，并改为“noise scales can be calibrated to the target privacy level”，避免暗示 Theorem 3 使用 add/remove 邻接。 |
+| **33** | 已改 | **P2 Definition 1 邻接** | “differing in at most one record”改为“where adjacency is defined according to the mechanism or theorem under consideration (Section~III-A and each theorem statement)”。 |
+| **34** | 已改 | **P3 Related Work MIA 表述** | “we add MIA evaluation … to show that our release limits inference in practice”改为“we add MIA and linkage-style attack evaluation … to assess privacy behavior empirically under the tested release setting”。 |
+| **35** | 已改 | **P4 问题形式化隐私目标** | Privacy goal 改为强调“output-side information leakage is formally constrained”，并写明实验通过 membership-inference 与 linkage-style attacks 评估。 |
+| **36** | 已改 | **P5 Section IV-B 标题** | “Reproducible algorithm”改为“Algorithmic implementation”，保留 \label{sec:algorithm}。 |
+| **37** | 已改 | **P6 图表解读弱化** | Baseline：改为“For the tested values of $\varepsilon$, the observed entropy error … remains below the theoretical bound $\Delta_H$ from Theorem~4”；Ablation：clarify/control/confirm/stable → illustrate/affect/show/remains informative across tested values of $m$；MIA：增加“in the tested setting”。 |
+| **38** | 已改 | **P7 Figure 3 图注** | 熵敏感度图注由“abstract contribution (i): calibrates…”改为“Entropy sensitivity bound $\Delta_H$ vs. dataset size $n$, illustrating the decrease of the theoretical bound used for calibrated histogram release.” |
+| **39** | 已改 | **P8 附录结构 I/J/K** | 附录明确为：I. Sufficient parameter domain for Theorem~5；J. Supplementary conceptual background（Noisy SGD）；K. Supplementary image-noise and additional experiments。 |
+| **40** | 已改 | **P9 Discussion 结构** | 讨论首段改为“观察→解读→局限”：先陈述 Fig 5/7 现象（bound 以下、MIA/linkage 趋近 random-guess），再写与隐私–效用权衡一致，最后写明“empirical evaluation limited to tested attack models, does not yet include attribute inference”。 |
+| **41** | 已改 | **P10 Conclusion 强化** | 结论保留两条定理级贡献；Limitations 中明确 (iii) Wiener/图像为 secondary，(iv) 仅 MIA/linkage、无 attribute inference；并增加收尾句：Future work includes attribute inference 覆盖、多模态/联邦、RKHS 有限维近似更紧分析。 |
+| **42** | 已改 | **Final P1 全局邻接句** | Section III-A 已为两种邻接分开表述（Theorem~4 replacement、Theorem~5 add/remove），且无“All mechanisms and bounds are stated for this adjacency model”之误；保持“The relevant adjacency model is stated explicitly in each theorem.” |
+| **43** | 已改 | **Final P2 Related Work 弱化** | Related Work 中 MIA 表述已为“assess privacy behavior empirically under the tested release setting”（此前已改）。 |
+| **44** | 已改 | **Final P3 Section IV-B 标题** | 已为“Algorithmic implementation”（此前已改）。 |
+| **45** | 已改 | **Final P4 问题形式化隐私目标** | 已为“output-side information leakage formally constrained”+ 实验通过 MIA 与 linkage-style 评估（此前已改）。 |
+| **46** | 已改 | **Final P5 Discussion 弱化** | 将“Overall, the proposed framework---…is both theoretically grounded and practically evaluable”改为“Overall, the reported results support the main entropy-calibrated release framework…; The RKHS/Wiener and image-noise components should be interpreted as supporting or supplementary analyses.” |
+| **47** | 已改 | **Final P6 Conclusion TIFS 版** | 结论全文替换为 TIFS 风格：强调两点定理贡献（熵敏感度 Theorem~4、机制 F Theorem~5）、实验结论（bound 以下、baseline 可比、MIA/linkage 趋近 random-guess）、REAEDP 作为 algorithmic release pipeline；Limitations 重写为四条（离散化、可扩展性、RKHS 有限维近似、MIA/linkage 评估与未来 attribute inference/多模态/联邦）。 |
+| **48** | 已改 | **Final P7 附录图像噪声定位** | 正文中所有引用 Appendix image-noise 处改为“Supplementary image-noise utility…included only as supporting evidence, not as a central part of the main theorem-to-mechanism evaluation pipeline”；实验开头与 Discussion (4) 同步弱化图像噪声为 supporting only。 |
+| **49** | 已改 | **Final P8 Cover Letter 更新** | 标题改为与正文一致“REAEDP: Entropy-Calibrated Differentially Private Data Release with Formal Guarantees and Attack-Based Evaluation”；Scope 段采用审稿建议段落（Theorem 4/5、无 unified/reproducible）；Why TIFS 中“reproducible experiments”改为“algorithmic implementation”。 |
+| **50** | 已改 | **Final P9 全局措辞** | 全文已无“unified framework”“reproducible algorithm”“limits inference in practice”“confirming that the release limits membership inference”；保持“differential privacy framework”“algorithmic implementation”“assess privacy behavior empirically”“consistent with stronger privacy in the tested setting”。 |
 
 ---
 

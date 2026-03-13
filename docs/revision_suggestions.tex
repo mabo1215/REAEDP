@@ -1,187 +1,225 @@
-\section*{Final TIFS-Oriented Revision Package}
+\section*{Final Revision Notes for the Current Version}
 
-\subsection*{A. Recommended New Title}
+\subsection*{Overall Assessment}
+The manuscript is now much closer to a submission-ready TIFS paper.
+The title is substantially improved, the main theorem line is largely stabilized,
+and the experiments are organized more clearly around privacy-test behavior,
+entropy-sensitivity validation, baseline comparison, and attack-based evaluation.
 
-\paragraph{Preferred title}
+At this stage, the remaining issues are no longer major theorem failures.
+Instead, they are final consistency and presentation issues that should be corrected
+before submission.
+
+\subsection*{Priority 1: Fix the Global Adjacency Sentence in Section III-A}
+
+\subsubsection*{Current problem}
+Section~III-A still states:
 \begin{quote}
-\textbf{REAEDP: Entropy-Calibrated Differentially Private Data Release with Formal Guarantees and Attack-Based Evaluation}
+\texttt{
+All mechanisms and bounds in this paper are stated for this adjacency model.
+}
 \end{quote}
+However, Theorem~4 is explicitly stated under add/remove adjacency,
+while Theorem~3 is stated under replacement adjacency.
+Therefore this sentence is no longer correct.
 
-\paragraph{Alternative title if you want to keep RKHS visible}
+\subsubsection*{Required action}
+Delete that sentence and replace it by a sentence that explicitly separates the two adjacency notions.
+
+\subsubsection*{Suggested replacement}
 \begin{quote}
-\textbf{REAEDP: Entropy-Calibrated Differentially Private Data Release in RKHS with Formal Guarantees and Attack-Based Evaluation}
-\end{quote}
-
-\paragraph{Why the title should be updated}
-The current title is still too long and still overemphasizes both Renyi entropy and Wiener kernel space relative to the strongest contributions that are now most stable in the manuscript. At the current stage, the paper is most defensible as a study of entropy-calibrated release, a synthetic-data mechanism \(F\), and attack-based evaluation, rather than as a paper whose single central contribution is specifically Renyi entropy or Wiener kernel analysis. 
-
-\subsection*{B. Recommended Replacement Abstract}
-
-\begin{quote}
-\textbf{
-Sensitive data release is vulnerable to output-side privacy threats such as membership inference, attribute inference, and record linkage, creating a need for mechanisms with both formal guarantees and empirically verifiable utility--privacy tradeoffs.
-We propose REAEDP, a differential privacy framework that combines entropy-calibrated histogram release with a synthetic-data release mechanism and attack-based evaluation.
-First, we derive an explicit sensitivity bound for Shannon entropy, together with an extension to Renyi entropy, enabling calibrated differentially private release of histogram statistics.
-Second, we introduce a synthetic-data mechanism \(F\) with a privacy-test structure and show that it satisfies \((\varepsilon,\delta)\)-differential privacy under the stated parameter domain.
-Experiments on multiple public tabular datasets show that the theoretical entropy bound is respected empirically, standard Laplace and Gaussian baselines remain below the bound, and both membership-inference and linkage-style attacks move toward random-guess behavior as \(\varepsilon\) decreases.
-These results indicate that REAEDP provides a practical release pipeline with formal privacy guarantees and attack-based evaluation in the tested settings.
+\texttt{
+For histogram entropy sensitivity (Theorem~3), we use replacement adjacency.
+For the synthetic-data mechanism \(F\) and its \((\varepsilon,\delta)\)-DP analysis (Theorem~4),
+we use add/remove adjacency.
+The relevant adjacency model is stated explicitly in each theorem.
 }
 \end{quote}
 
-\paragraph{Why this abstract is better}
-The present abstract in the manuscript is already improved, but it still carries too many ideas at once, including Shannon/Renyi entropy, histogram calibration, synthetic-data release, Wiener kernel/RKHS, and practical significance, in a way that still feels slightly overloaded. A stronger TIFS-style abstract should foreground the main problem, the main mechanism, the formal guarantee, and the tested empirical outcome in a more focused way. :contentReference[oaicite:2]{index=2}
+\subsection*{Priority 2: Soften the Related Work Claim on Attack Evaluation}
 
-\subsection*{C. Recommended Replacement Conclusion}
-
+\subsubsection*{Current problem}
+Section~II-D still contains wording of the form:
 \begin{quote}
-\textbf{
+\texttt{
+we add MIA evaluation (Figure~7) to show that our release limits inference in practice
+}
+\end{quote}
+This is still too strong for the current empirical scope.
+
+\subsubsection*{Suggested replacement}
+\begin{quote}
+\texttt{
+we add MIA and linkage-style attack evaluation (Figure~7) to assess privacy behavior empirically under the tested release setting
+}
+\end{quote}
+
+\subsection*{Priority 3: Rename Section IV-B}
+
+\subsubsection*{Current problem}
+Section~IV-B is still titled:
+\begin{quote}
+\texttt{Reproducible algorithm}
+\end{quote}
+This wording is still slightly too strong and not ideal as a journal section title.
+
+\subsubsection*{Suggested replacement}
+\begin{quote}
+\texttt{Algorithmic implementation}
+\end{quote}
+
+\subsection*{Priority 4: Tighten the Privacy Goal in Section III-E}
+
+\subsubsection*{Current problem}
+The privacy goal currently says:
+\begin{quote}
+\texttt{
+Privacy goal: \(M\) satisfies \((\varepsilon,\delta)\)-DP for the adjacency model in Section~III-A
+so that membership inference, attribute inference, and record linkage are bounded.
+}
+\end{quote}
+This is too broad, because the paper explicitly evaluates MIA and a linkage-style attack,
+but does not directly benchmark attribute inference.
+
+\subsubsection*{Suggested replacement}
+\begin{quote}
+\texttt{
+Privacy goal: \(M\) satisfies \((\varepsilon,\delta)\)-DP under the relevant adjacency model in Section~III-A,
+so that output-side information leakage is formally constrained.
+In the experiments, we assess this behavior explicitly through membership-inference and linkage-style attacks.
+}
+\end{quote}
+
+\subsection*{Priority 5: Soften Experimental Interpretations in the Discussion}
+
+\subsubsection*{Current problem}
+The discussion still contains wording such as:
+\begin{quote}
+\texttt{
+MIA accuracy drops to near random as \(\varepsilon\) decreases, confirming that the release limits membership inference.
+}
+\end{quote}
+This remains slightly stronger than necessary.
+
+\subsubsection*{Suggested replacement}
+\begin{quote}
+\texttt{
+MIA accuracy, AUC, and linkage-style accuracy move toward random-guess behavior as \(\varepsilon\) decreases,
+which is consistent with stronger privacy under smaller \(\varepsilon\) in the tested setting.
+}
+\end{quote}
+
+\subsubsection*{Current problem}
+The discussion also still says:
+\begin{quote}
+\texttt{
+Overall, the proposed framework---entropy sensitivity analysis, synthetic data mechanism \(F\),
+Wiener kernel release, and multi-dataset real-data validation---is both theoretically grounded
+and practically evaluable through the reported figures and metrics.
+}
+\end{quote}
+This still gives too much equal weight to all components.
+
+\subsubsection*{Suggested replacement}
+\begin{quote}
+\texttt{
+Overall, the reported results support the main entropy-calibrated release framework,
+including the histogram-entropy sensitivity bound, the synthetic-data mechanism \(F\),
+and the tested privacy behavior under baseline comparison and attack evaluation.
+The RKHS/Wiener and image-noise components should be interpreted as supporting or supplementary analyses.
+}
+\end{quote}
+
+\subsection*{Priority 6: Replace the Conclusion with a More Final TIFS-Style Version}
+
+\subsubsection*{Current problem}
+The conclusion still contains several outdated phrases:
+\begin{itemize}
+    \item \texttt{unified framework},
+    \item \texttt{under the Wiener kernel space},
+    \item \texttt{reproducible algorithm}.
+\end{itemize}
+These are still broader or less polished than needed.
+
+\subsubsection*{Suggested replacement conclusion}
+\begin{quote}
+\texttt{
 We have proposed REAEDP, a differential privacy framework for entropy-calibrated data release with formal guarantees and attack-based evaluation.
 The main technical contributions are twofold:
 first, an explicit sensitivity bound for histogram entropy (Theorem~3), which enables calibrated differentially private release of histogram statistics;
 second, a synthetic-data release mechanism \(F\) with a formal \((\varepsilon,\delta)\)-DP guarantee under the stated parameter domain (Theorem~4).
-Across multiple public tabular datasets, the experiments show that the empirical entropy sensitivity remains below the theoretical bound in the tested regime, that standard Laplace and Gaussian histogram baselines achieve comparable behavior, and that membership-inference and linkage-style attack performance moves toward random-guess behavior as \(\varepsilon\) decreases.
+Across multiple public tabular datasets, the experiments show that the empirical entropy sensitivity remains below the theoretical bound in the tested regime,
+that standard Laplace and Gaussian histogram baselines achieve comparable behavior,
+and that membership-inference and linkage-style attack performance moves toward random-guess behavior as \(\varepsilon\) decreases.
 These results support the use of REAEDP as an algorithmic release pipeline for privacy-preserving data publication in the tested settings.
 
 This work also has several limitations.
 The entropy-based release depends on histogram discretization and may be sensitive to bin selection, especially in high-dimensional settings.
 Scalability to very high-dimensional or very large-scale data may require approximate or distributed implementations.
-The RKHS/Wiener-kernel analysis relies on finite-dimensional numerical approximation of an infinite-dimensional space, and tightening the associated approximation error under differential privacy remains open.
-Finally, while the paper explicitly evaluates membership inference and a linkage-style attack, stronger experimental coverage of attribute inference and broader multimodal or federated settings is left for future work.
+The RKHS/Wiener-kernel analysis relies on finite-dimensional numerical approximation of an infinite-dimensional space,
+and tightening the associated approximation error under differential privacy remains open.
+Finally, while the paper explicitly evaluates membership inference and a linkage-style attack,
+stronger experimental coverage of attribute inference and broader multimodal or federated settings is left for future work.
 }
 \end{quote}
 
-\paragraph{Why this conclusion is better}
-Your current conclusion is already better than earlier versions because it has removed some of the strongest overclaims, but it still retains wording such as \emph{under the Wiener kernel space}, and it still gives somewhat equal rhetorical weight to all subcomponents of the paper. The paper is currently strongest when the conclusion emphasizes the entropy bound, the synthetic mechanism \(F\), and the tested attack behavior, then treats RKHS and broader extensions as secondary or future-facing. 
+\subsection*{Priority 7: Clean Up the Main-Text Positioning of Supplementary Material}
 
-\subsection*{D. Remaining Revision Checklist to Apply Before Submission}
+\subsubsection*{Current problem}
+The manuscript still gives visible space to image-noise and appendix-only supporting material.
+This is not wrong, but it still risks diluting the central TIFS story.
 
-\subsubsection*{D1. Update the title in the manuscript}
-Replace the current title
+\subsubsection*{Suggested wording}
+Wherever appendix-only image-noise material is referenced, use wording of the following form:
 \begin{quote}
-\texttt{REAEDP: Renyi Entropy Analysis and Evaluation Based (\(\varepsilon,\delta\))-Differential Privacy Protection Method under the Wiener Kernel Space}
+\texttt{
+Supplementary image-noise utility results are provided in the appendix and are included only as supporting evidence,
+not as a central part of the main theorem-to-mechanism evaluation pipeline.
+}
 \end{quote}
-with the preferred shorter title above.
 
-\paragraph{Reason}
-The current title still reads more like a thesis chapter or dissertation-style heading than a TIFS paper title, and it overcommits to two secondary threads of the paper. :contentReference[oaicite:4]{index=4}
+\subsection*{Priority 8: Update the Cover Letter Immediately}
 
-\subsubsection*{D2. Replace the current abstract}
-Use the replacement abstract above.
+\subsubsection*{Current problem}
+The uploaded cover letter is still an old version:
+\begin{itemize}
+    \item it uses the old title;
+    \item it refers to Theorem~4 and Theorem~5 instead of Theorem~3 and Theorem~4;
+    \item it still says \texttt{unified framework};
+    \item it still says \texttt{reproducible algorithm}.
+\end{itemize}
 
-\paragraph{Reason}
-The current abstract is improved but still somewhat overloaded, especially in the way it simultaneously foregrounds entropy calibration, synthetic release, RKHS/Wiener kernel structure, and practical significance. A sharper abstract will make the paper look more journal-ready. :contentReference[oaicite:5]{index=5}
+\subsubsection*{Suggested replacement paragraph for the cover letter}
+\begin{quote}
+\texttt{
+Scope and contribution.
+The paper addresses the problem of calibrating and evaluating differential privacy for sensitive data release.
+We propose REAEDP, a differential privacy framework that
+(i) gives an entropy sensitivity bound for histogram statistics (Theorem~3), enabling calibrated \(\varepsilon\)-DP histogram release;
+(ii) introduces a synthetic-data release mechanism with a formal \((\varepsilon,\delta)\)-DP guarantee (Theorem~4);
+and (iii) validates the framework with baseline comparison, ablation studies, and membership-inference/linkage-style attack evaluation on multiple public tabular datasets.
+The manuscript therefore combines privacy mechanism design, entropy-based analysis, and attack-based evaluation in a form aligned with the scope of TIFS.
+}
+\end{quote}
 
-\subsubsection*{D3. Replace the current conclusion}
-Use the replacement conclusion above.
+\subsection*{Priority 9: Final Global Search-and-Replace Pass}
 
-\paragraph{Reason}
-The current conclusion is still slightly too broad in tone and still leans too much on the Wiener/RKHS phrasing, whereas the paper is strongest when framed around entropy-calibrated release, the formal DP mechanism \(F\), and tested attack behavior. 
-
-\subsubsection*{D4. Remove or demote the remaining over-strong phrases}
-Although several strong phrases have already been softened, a few still remain or still need another pass.
-
-\paragraph{Recommended global replacements}
+\subsubsection*{Recommended global replacements}
 \begin{itemize}
     \item Replace \texttt{unified framework} with \texttt{differential privacy framework}.
     \item Replace \texttt{reproducible algorithm} with \texttt{algorithmic implementation}.
-    \item Replace \texttt{confirming that the release limits membership inference} with
-    \texttt{consistent with the expected privacy behavior under the tested attack setting}.
-    \item Replace \texttt{suitable for privacy-preserving data release and auditing} with
-    \texttt{supports privacy-preserving data release and attack-based evaluation in the tested settings}.
+    \item Replace \texttt{show that our release limits inference in practice} with \texttt{assess privacy behavior empirically in the tested setting}.
+    \item Replace \texttt{confirming that the release limits membership inference} with \texttt{consistent with stronger privacy in the tested attack setting}.
 \end{itemize}
 
-\paragraph{Reason}
-The manuscript now has a much better theoretical basis than before, but the experimental scope still does not support maximal claims, especially for threats not directly benchmarked. 
-
-\subsubsection*{D5. Tighten the threat-model wording}
-Use wording of the following form:
-\begin{quote}
-\texttt{
-We consider membership inference, attribute inference, and record linkage as relevant output-side privacy threats.
-The formal DP analysis constrains output leakage in general.
-The explicit empirical evaluation in this paper focuses on membership inference and a linkage-style attack, while attribute inference is discussed as a relevant threat model but left for future experimental study.
-}
-\end{quote}
-
-\paragraph{Reason}
-The manuscript now explicitly evaluates MIA and a linkage-style attack, which is stronger than before, but it still does not experimentally benchmark attribute inference itself. The wording should reflect that honestly. 
-
-\subsubsection*{D6. Soften the wording in Discussion}
-In the discussion section, replace sentences of the form
-\begin{quote}
-\texttt{MIA accuracy drops to near random as \(\varepsilon\) decreases, confirming that the release limits membership inference.}
-\end{quote}
-with
-\begin{quote}
-\texttt{MIA accuracy drops toward random-guess behavior as \(\varepsilon\) decreases in the tested setting, which is consistent with stronger privacy at smaller \(\varepsilon\).}
-\end{quote}
-
-\paragraph{Reason}
-This is a more defensible interpretation of the current evidence. 
-
-\subsubsection*{D7. Soften the interpretation of Figure 3 / Figure 4 / Figure 7 style paragraphs}
-Use wording of the following form:
-\begin{itemize}
-    \item For the privacy-test figure: emphasize that it illustrates empirical privacy-test behavior, not that it proves Theorem~4 by itself.
-    \item For the entropy-bound figure: emphasize that the empirical sensitivity remains below the theoretical bound in the tested regime.
-    \item For the attack-evaluation figure: emphasize that MIA and linkage-style attack performance approaches random-guess behavior as \(\varepsilon\) decreases in the tested setting.
-\end{itemize}
-
-\paragraph{Reason}
-Your paper is stronger now, but the figure commentary should still avoid sounding more conclusive than the evidence warrants. 
-
-\subsubsection*{D8. Move secondary material more decisively into supplementary status}
-At present, the manuscript still carries secondary threads such as:
-\begin{itemize}
-    \item Wiener kernel / RKHS private mean convergence,
-    \item image-noise PSNR/MAE/SSIM material in the appendix,
-    \item conceptual Noisy-SGD background.
-\end{itemize}
-
-\paragraph{Recommended action}
-Keep the main paper centered on
-\[
-\text{entropy sensitivity} \rightarrow \text{histogram release} \rightarrow \text{synthetic mechanism } F \rightarrow \text{attack evaluation},
-\]
-and move image-noise and remaining conceptual background more clearly into supplementary status.
-
-\paragraph{Reason}
-This will make the manuscript feel more like one focused TIFS paper rather than several adjacent privacy narratives placed together. The current discussion and appendix still give significant visual and rhetorical space to secondary threads. 
-
-\subsubsection*{D9. Tighten the Introduction contribution paragraph}
-The introduction is already much better than before, but it should now align exactly with the final title and abstract.
-
-\paragraph{Recommended contribution structure}
-State the contributions as:
+\subsection*{Final Bottom-Line Assessment}
+The paper is no longer in a major-repair stage.
+The remaining work is a final polish stage:
 \begin{enumerate}
-    \item an entropy sensitivity bound for calibrated histogram release;
-    \item a synthetic-data mechanism \(F\) with formal \((\varepsilon,\delta)\)-DP guarantee;
-    \item attack-based evaluation using MIA and linkage-style inference on multiple public tabular datasets.
+    \item fix the one incorrect global adjacency sentence,
+    \item soften the last few over-strong claims,
+    \item rename Section~IV-B,
+    \item tighten the conclusion,
+    \item update the cover letter.
 \end{enumerate}
-
-\paragraph{Reason}
-These are now the most stable and best-supported contributions in the paper. The introduction should not foreground every secondary component at the same level. 
-
-\subsubsection*{D10. Final stylistic cleanup before submission}
-Before submission, do one final global pass for the following:
-\begin{enumerate}
-    \item check that title, abstract, introduction, and conclusion all describe the same center of gravity;
-    \item check that no residual phrase such as \texttt{unified framework} or \texttt{reproducible algorithm} remains;
-    \item check that all references to attack evaluation match what is actually benchmarked;
-    \item check that appendix references to image-noise material are clearly labeled supplementary rather than core;
-    \item check that the final bibliography/year/manuscript-date placeholders are updated.
-\end{enumerate}
-
-\subsection*{E. Bottom-Line Recommendation}
-
-At this stage, the manuscript has already crossed the hardest theoretical repair stage.
-The most valuable final improvements are no longer major theorem rewrites, but:
-\begin{enumerate}
-    \item updating the title,
-    \item sharpening the abstract,
-    \item tightening the conclusion,
-    \item reducing overclaiming,
-    \item demoting secondary materials.
-\end{enumerate}
-
-Once those changes are made, the paper will read much more like a focused TIFS submission rather than a technically repaired draft.
+Once these are done, the manuscript will look much more like a finished TIFS submission rather than a technically repaired draft.
