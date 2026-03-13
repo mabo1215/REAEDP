@@ -1,11 +1,11 @@
 # 审稿意见修改进度（Top-Tier Journal Style Review）
 
 **更新日期：** 2026-03  
-**当前进度：** 约 **100%**（已完成 50 条）
+**当前进度：** 约 **100%**（已完成 58 条）
 
 ---
 
-## 一、已完成的审稿意见（共 50 条）
+## 一、已完成的审稿意见（共 58 条）
 
 每条包含：**序号 | 状态 | 审稿意见概要 | 修改说明**
 
@@ -61,6 +61,14 @@
 | **48** | 已改 | **Final P7 附录图像噪声定位** | 正文中所有引用 Appendix image-noise 处改为“Supplementary image-noise utility…included only as supporting evidence, not as a central part of the main theorem-to-mechanism evaluation pipeline”；实验开头与 Discussion (4) 同步弱化图像噪声为 supporting only。 |
 | **49** | 已改 | **Final P8 Cover Letter 更新** | 标题改为与正文一致“REAEDP: Entropy-Calibrated Differentially Private Data Release with Formal Guarantees and Attack-Based Evaluation”；Scope 段采用审稿建议段落（Theorem 4/5、无 unified/reproducible）；Why TIFS 中“reproducible experiments”改为“algorithmic implementation”。 |
 | **50** | 已改 | **Final P9 全局措辞** | 全文已无“unified framework”“reproducible algorithm”“limits inference in practice”“confirming that the release limits membership inference”；保持“differential privacy framework”“algorithmic implementation”“assess privacy behavior empirically”“consistent with stronger privacy in the tested setting”。 |
+| **51** | 已改 | **Final-Check P1 附录引用统一** | 正文不再出现泛泛的 “Appendix A”；Theorem 1–2、Lemma 与 Theorem 5 等处统一改为 “See/Proof is in Appendix~\\ref{app:proofs}”，与 `appendix_main.tex` 中 `\\section{Proofs}` 对应。 |
+| **52** | 已改 | **Final-Check P2 附录 Theorem 4 标题** | `appendix_main.tex` 中小节标题由 “Proof of Theorem 4 (Sensitivity of $H$)” 改为 “Proof of Theorem 4 (Shannon entropy sensitivity under replacement adjacency)”，与正文中 Theorem 4 的最终表述完全一致。 |
+| **53** | 已改 | **Final-Check P3 Figure 4 图注弱化** | Figure~\\ref{fig:delta_h_empirical} 图注改为 “mean and maximum over adjacent pairs. The ratio remains below 1 in the tested regime, indicating that the empirical entropy sensitivity stays below the theoretical bound.”，不再用 “confirms bound holds” 这类过强措辞。 |
+| **54** | 已改 | **Final-Check P4 Discussion 结构核对** | Discussion 开头段已按“观察→解读→局限”结构改写（Figures 5/7 现象、与隐私–效用权衡一致、局限于当前攻击模型且无 attribute inference benchmark），与审稿建议风格一致。 |
+| **55** | 已改 | **Final-Check P5 附录 K 表格措辞** | `Figure and table data descriptions` 中 Table~\\ref{tab:figures_theory} 改为 “Supplementary figures and their experimental role (data shown and connection to the theory)”，列名由 “Theory supported” 改为 “Experimental role”，去掉 “abstract contribution(s)” 等内部起稿式措辞，仅保留技术性描述。 |
+| **56** | 已改 | **Final-Check P6 附录结构角色说明** | 附录已按 proofs/parameter 域 + J（Supplementary conceptual background）+ K（Supplementary image-noise and additional experiments）结构划分，并在 `Figure and table data descriptions` 中用中性语言描述各图角色，强化 theorem-critical 与 supplementary 的分界。 |
+| **57** | 已改 | **Final-Check P7 实验写作微调** | “All experiments were run with fixed random seed …” 改为 “Unless otherwise stated, experiments were run with a fixed random seed … to reduce variability across repeated trials”；Real-data 段 “This illustrates that entropy-based DP release applies …” 改为 “illustrates the applicability of the entropy-based DP release pipeline … in the tested setting”。 |
+| **58** | 已改 | **Final-Check P8 结论最终核对** | 结论第一段仅强调两条定理级贡献（熵敏感度上界、机制 $\\mathcal{F}$ 的 $(\\varepsilon,\\delta)$-DP 保证）与实验结果；RKHS/Wiener 与 image-noise 仅在 Limitations 中作为 secondary/supplementary 出现，并以审稿建议的 closing sentence 收尾。 |
 
 ---
 
