@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
 REAEDP entry point: run experiments from config.json.
+Appendix content (proofs, figure/table descriptions, multi-dataset results)
+lives in paper/appendix.tex only; this script runs experiments and does not
+contain LaTeX or appendix text.
+
 Usage:
   python main.py                    # run all tasks listed in config["run"]
   python main.py --config config.json
