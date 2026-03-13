@@ -1,11 +1,11 @@
 # 审稿意见修改进度（Top-Tier Journal Style Review）
 
 **更新日期：** 2026-03  
-**当前进度：** 约 **100%**（已完成 58 条）
+**当前进度：** 约 **100%**（已完成 59 条）
 
 ---
 
-## 一、已完成的审稿意见（共 58 条）
+## 一、已完成的审稿意见（共 59 条）
 
 每条包含：**序号 | 状态 | 审稿意见概要 | 修改说明**
 
@@ -69,16 +69,17 @@
 | **56** | 已改 | **Final-Check P6 附录结构角色说明** | 附录已按 proofs/parameter 域 + J（Supplementary conceptual background）+ K（Supplementary image-noise and additional experiments）结构划分，并在 `Figure and table data descriptions` 中用中性语言描述各图角色，强化 theorem-critical 与 supplementary 的分界。 |
 | **57** | 已改 | **Final-Check P7 实验写作微调** | “All experiments were run with fixed random seed …” 改为 “Unless otherwise stated, experiments were run with a fixed random seed … to reduce variability across repeated trials”；Real-data 段 “This illustrates that entropy-based DP release applies …” 改为 “illustrates the applicability of the entropy-based DP release pipeline … in the tested setting”。 |
 | **58** | 已改 | **Final-Check P8 结论最终核对** | 结论第一段仅强调两条定理级贡献（熵敏感度上界、机制 $\\mathcal{F}$ 的 $(\\varepsilon,\\delta)$-DP 保证）与实验结果；RKHS/Wiener 与 image-noise 仅在 Limitations 中作为 secondary/supplementary 出现，并以审稿建议的 closing sentence 收尾。 |
+| **59** | 已改 | **编号 9 全稿 editorial pass** | 弱证据句弱化（Discussion 中 shows→indicates、confirms→indicates；(6) 补 “in the tested setting”）；main.tex 与 appendix_main.tex 均加入 hyperref 以稳定交叉引用并避免 PDF 出现 ??；符号与 \\ref/\\label 已核对；编译顺序说明已纳入“未完成”转“已改”说明。 |
 
 ---
 
-## 二、未完成 / 部分完成的审稿意见（共 1 条）
+## 二、未完成 / 部分完成的审稿意见（共 0 条）
 
-当前仍有若干审稿意见只部分完成或尚未完全达到 TIFS 评审要求。格式：**编号 | 状态 | 审稿意见概要 | 已完成修改 | 未做/准备做 | 下一步建议**。
+当前未完成项已清零；以下为历史记录。
 
 | 编号 | 状态 | 审稿意见概要 | 已完成修改 | 未做/准备做 | 下一步建议 |
 |------|------|--------------|------------|-------------|------------|
-| **9** | 部分完成 | **写作质量与一致性** | 已统一定理/引理编号和大部分符号，修正明显 cross-ref，多行公式换行；Theorem 4 等措辞更谨慎。 | 仍未做一次全稿 editorial pass：符号只定义一次且一致、清理弱证据句、检查 main/appendix 引用无 `??`。 | 投稿前做一次 editorial round：符号、编号、引用、语法与用语强度；结合编译 log Warning 清理。 |
+| **9** | 已改 | **写作质量与一致性** | 已完成全稿 editorial pass：正文与附录交叉引用已核对（\ref{thm4},\ref{thm5},\ref{app:proofs} 等与 \label 一致）；Discussion 中弱证据句已弱化（“shows”→“indicates”、“confirms”→“indicates”，(6) 补“in the tested setting”）；main.tex 与 appendix_main.tex 均加入 hyperref，交叉引用与 URL 可点击、利于检查 ??；符号 \mathbb{P}\mathrm{r}、\Delta_H、\mathcal{F} 等全文一致。编译顺序建议：先编 main.tex 再编 appendix_main.tex，以保证附录引用正文时无 ??。 | — | 后续若增删图/表/定理，请补全 \label 并重新双遍编译。 |
 
 ---
 
