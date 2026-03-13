@@ -1,11 +1,11 @@
 # 审稿意见修改进度（Top-Tier Journal Style Review）
 
 **更新日期：** 2026-03  
-**当前进度：** 约 **100%**（已完成 14 条）
+**当前进度：** 约 **100%**（已完成 20 条）
 
 ---
 
-## 一、已完成的审稿意见（共 14 条）
+## 一、已完成的审稿意见（共 20 条）
 
 每条包含：**序号 | 状态 | 审稿意见概要 | 修改说明**
 
@@ -25,30 +25,30 @@
 | **12** | 已改 | **实验**：按 RQ1–RQ4 组织（隐私–效用、与基线、模块贡献、攻击鲁棒性）。 | 实验开头给出 RQ1–RQ4，并新增基线、消融、MIA 三个子节及对应图与讨论。 |
 | **13** | 已改 | **结论**：除总结外需写“局限与未来工作”。 | 结论末增加“Limitations and future work”（离散化/高维、可扩展性、RKHS 近似、联邦与更强攻击等）。 |
 | **14** | 已改（cover letter） | **期刊定位**：当前更适合 TIFS 等隐私/安全期刊，若强化 ML 方法创新可考虑 TNNLS。 | 在 `docs/cover_letter.txt`（纯英文、无占位符）中写明本工作侧重隐私机制与安全数据发布、更适合 TIFS 等隐私/安全期刊；正文不写该表述。投稿时使用该 cover letter 即可。 |
+| **15** | 已改 | **Related work 比较表** | 在 Related work “Gap addressed” 后增加 Table~\ref{tab:related}（Method / Data Type / Formal DP / Synthetic / Entropy Calibration / Attack Eval / Difference），对比 Dwork、Noisy-SGD、DP histogram、Kernel prior 与 This work（REAEDP），满足 TIFS 对定位清晰度的期望。 |
+| **16** | 已改 | **Rényi 在标题与贡献中的定位（varying $\alpha$）** | 在附录 “Rényi entropy sensitivity” 后增加 “Varying $\alpha$: calibration and risk” 段落及 Table~\ref{tab:varying_alpha}（$C_\alpha = 2|\alpha|/(|1-\alpha|\ln 2)$ 随 $\alpha$ 变化），说明 Rényi 熵在校准中的 operational 角色，与保留 Rényi 于标题的选择一致。 |
+| **17** | 已改 | **缺乏单一清晰的安全问题与机制（主线收敛）** | 将 Noisy-SGD 与纯图像噪声实验下放到附录：正文删除 “Traditional Noisy-SGD” 与 “Performance measurement” 小节，删除 “Privacy--utility tradeoff (image noise)” 与 “Metrics comparison: Laplace vs.\ Gaussian” 小节及对应图，上述内容迁至 `appendix_main.tex`（Appendix~\ref{app:noisy_sgd}、Appendix~\ref{app:image_noise}）；Related Work 与 Motivation 中 Noisy-SGD 仅保留一句并指向附录；实验开头与讨论中明确主线为“熵校准 + 合成数据机制 $\mathcal{F}$”，图像 PSNR/MAE 仅以附录支撑形式提及。 |
+| **18** | 已改 | **Theorem 4 / Lemma 4 的参数域与实验设置需一致** | 在 `appendix_main.tex` 的 “Parameter domain for $(\varepsilon_0,\gamma,t,k)$” 小节末尾增加 “Verification that reported experiments use parameters in $\mathcal{A}$” 段落：逐一说明 Figure~\ref{fig:generalpic} 使用的 $t=2$、$k \in \{10,20,30,50\}$、$\gamma>1$ 及 $|D| \ge 50$ 满足 $\gamma>1$、$t \le k$、$k \le |D|$ 与 Lemma 要求，故落在 $\mathcal{A}$ 内；并注明其余未列出的 $\mathcal{F}$ 配置仅作经验性探索、不声称实例化 Theorem~\ref{thm5}。 |
+| **19** | 已改 | **实验强度不足（攻击与基线）** | 补强 MIA：在 `run_mia_evaluation.py` 中增加 AUC、5 次重复运行及 95\% CI、linkage-style 攻击（基于 L2 距离的“哪个参考发布更近”猜测）；图中报告 MIA accuracy（带 CI）、MIA AUC、linkage accuracy。增加 2 个 DP synthetic 基线：在 `run_baseline_comparison.py` 中增加 “DP synthetic (Laplace)” 与 “DP synthetic (Gaussian)”（对 count 加噪后归一化再 multinomial 抽样得到合成直方图），与 Laplace、Gaussian 一起画熵误差与 MAE；正文 Baseline 与 Discussion 已更新。 |
+| **20** | 已改 | **“实验验证定理”的表述与设计** | 在实验中增加小规模、严格可控的 synthetic 实验：新增 `run_delta_h_empirical.py`，对相邻直方图对 $(D,D')$ 显式枚举或随机采样，估计 $\widehat{\Delta H} = \max_{D\sim D'} |H(D)-H(D')|$，与理论上界 $\Delta_H$ 比较；输出 `fig_delta_h_empirical.png` 与 `data/delta_h_empirical.csv`。正文新增 “Empirical entropy sensitivity ($\widehat{\Delta H}$ vs.\ bound)” 小节与 Figure~\ref{fig:delta_h_empirical}，说明比值 $<1$、行为与 Theorem~\ref{thm4} 一致；Discussion 中补充 (1b) 对应结论。 |
 
 ---
 
-## 二、未完成 / 部分完成的审稿意见
+## 二、未完成 / 部分完成的审稿意见（共 1 条）
 
 当前仍有若干审稿意见只部分完成或尚未完全达到 TIFS 评审要求。每条包含：**编号 | 状态 | 审稿意见概要 | 已完成修改 | 未做/准备做 | 下一步建议**。
 
 | 编号 | 状态 | 审稿意见概要 | 已完成修改 | 未做/准备做 | 下一步建议 |
 |------|------|--------------|------------|-------------|------------|
-| **1** | 部分完成 | 缺乏单一清晰的安全问题与机制 | 引言和贡献已围绕 REAEDP 一个主框架（熵敏感度 + 机制 $\mathcal{F}$ + 可复现实验）重写，弱化了 Noisy-SGD 和图像噪声的比重；正文结构上“Method + Experiments”已紧扣该主线。 | 仍然同时保留 RKHS mean、图像 PSNR/MAE、Noisy-SGD 等多条线，尚未严格收敛为“一个主机制 + 一个主安全主张 + 其他内容完全从属”的 TIFS 级结构。 | 视篇幅与投稿策略，进一步考虑：将 Noisy-SGD 和纯图像噪声实验下放到附录或删减；在正文中突出“熵校准 + 合成数据机制”这一主线，对其他内容只作为支撑示例而非并列贡献。 |
-| **3** | 部分完成 | Theorem 4 / Lemma 4 的参数域与实验设置需一致 | 已修正明显矛盾处（附录中由 $1 \ge t \ge k$ 改为 $t \le k$），避免与当前实验设置直接冲突；正文用语也改为“行为与定理一致”而非“直接验证”；在 `appendix_main.tex` 中新增“Parameter domain for $(\varepsilon_0,\gamma,t,k)$” 小节，形式化给出一组足以支撑 Lemma 与 Theorem~\ref{thm5} 的参数域 $\mathcal{A}$，并在 Experiments 开头注明“所有涉及 $\mathcal{F}$ 的实验均选取自该域”。 | 仍未完全形式化证明所有具体实验配置都落在 $\mathcal{A}$ 中，也尚未处理可能超出该域时的备用定理。 | 后续如需进一步增强严谨性，可在附录中增加一个小段落，逐一检查主要实验中使用的 $(\varepsilon_0,\gamma,t,k)$ 是否满足列出的条件，或在存在例外时单独说明这些实验仅作经验性探索而非定理实例。 |
-| **5** | 部分完成 | Renyi 在标题与贡献中的定位 | Rényi 敏感度结果已集中放在附录“R\'enyi entropy sensitivity (explicit upper bound)”小节，正文主要以 Shannon 熵为主；文字上不再过分强调 Renyi。 | 论文标题仍然突出“Renyi Entropy”，贡献列表中对 Renyi 的 operational 角色尚不够清晰；尚未完全按评审建议决定“要么让 Renyi 在方法和实验中居于中心，要么从标题中移除”。 | 结合投稿策略，做出明确选择：若保留 Renyi 于标题，则在方法/实验中增加一段“varying $\alpha$ 的校准/风险分析”；若时间有限，则将标题改为突出“entropy-calibrated DP release”，并在引言中把 Renyi 部分定位为补充理论。 |
-| **6** | 部分完成 | 实验强度不足（攻击与基线） | 已增加 baseline comparison、ablation、MIA evaluation、多数据集验证，实验结构比原稿更清晰；在正文中弱化了“验证定理”措辞，改为“行为与定理一致”。 | 相比评审建议，当前攻击模型仍偏弱：缺少更强 MIA / linkage / attribute-inference 攻击（含特征定义、AUC/CI、多次重复）、更丰富的 DP 合成数据与 kernel 基线；相关 metrics 多集中在图像质量与简单熵误差，尚未完全覆盖评审提出的安全/实用性指标。 | 在时间允许的情况下，优先补强一两个代表性攻击（如更系统的 MIA + linkage），并加入至少 1–2 个 DP synthetic baselines；如无法在本轮完成，可在 cover letter 中说明本稿在攻击强度上的局限，并将其作为未来工作强调。 |
-| **7** | 部分完成 | “实验验证定理”的表述与设计 | 已将 “directly validates Theorem~\ref{thm4}” 改为 “behavior is consistent with Theorem~\ref{thm4}”，避免过度声称；Figure~\ref{fig:entropy_bound} 等图的解读更加谨慎。 | 仍未按照评审建议加入定理对齐的数值实验（如 $\widehat{\Delta H}$ 的数值估计、隐私损失 $L(o)$ 的经验尾部对比等），当前实验主要是 qualitative consistency。 | 视篇幅与时间，在附录或实验中增加一个小规模、严格可控的 synthetic 实验：显式枚举或随机搜索邻接对 $(D,D')$，估计 $\widehat{\Delta H}$ 并与理论上界比较；如果无法完成，继续保持保守措辞，不再使用“validate theorem”之类表述。 |
-| **8** | 部分完成 | Related work 定位与比较表 | Related work 已按主题拆分，并增加“Gap addressed”段落，说明本文与已有工作的差别。 | 评审建议的 structured comparison table（Method / Data Type / DP Guarantee / Synthetic Release / Entropy Calibration / Attack Eval / Difference）仍未实现；整体定位仍偏文字描述。 | 在 Related work 或附录中增加一张简洁比较表，总结 3–5 篇最接近的工作及“本稿差异”列，以满足 TIFS 对定位清晰度的期望。 |
 | **9** | 部分完成 | 写作质量与一致性 | 已统一定理/引理编号和大部分符号（如邻接模型、$\mathbb{P}\mathrm{r}$、$\Delta_H$），修正了明显的 cross-ref 错误，并对多行公式做了换行处理；Theorem 4 等的措辞更谨慎。 | 仍未进行一次“从头到尾”的 editorial pass：比如逐一检查所有符号只定义一次且使用一致、清理所有可能的弱证据性语句、检查 main/appendix 所有引用是否无残留 `??` 等。 | 在投稿前留一次专门的 editorial round：仅关注符号、编号、引用、语法与用语强度（删除/弱化 speculative claims），可结合编译 log 中的 Warning 一起清理。 |
 
 ---
 
 ## 三、文件与命令速查
 
-- **论文与图**：`paper/main.tex`、`paper/appendix.tex`，图在 `paper/fig/`。
+- **论文与图**：`paper/main.tex`、`paper/appendix_main.tex`，图在 `paper/fig/`。
 - **生成全部论文图**：`python main.py --run paper_figures`。
-- **仅生成新增实验图**：`python main.py --run baseline_comparison ablation mia_evaluation`。
+- **仅生成新增实验图**：`python main.py --run baseline_comparison ablation mia_evaluation delta_h_empirical`。
 - **编译正文 PDF（不含附录）**：在 `paper/` 目录运行 `build_paper.bat` 或 `bash build_paper.sh`，生成 `main.pdf`。
 - **编译附录 PDF（独立文件）**：同上脚本会顺序编译 `appendix_main.tex`，生成 `appendix_main.pdf`，正文与附录之间的交叉引用已通过 `xr` 配置好。
 - **Cover letter**：`docs/cover_letter.txt`（纯英文、无占位符；说明本工作侧重隐私机制与安全数据发布，更适合 TIFS 等隐私/安全期刊）。

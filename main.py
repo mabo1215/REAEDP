@@ -48,6 +48,7 @@ def main():
         "privacy_test_fig1", "wiener_figures", "epsilon_utility_curve",
         "entropy_bound_curve", "metrics_comparison", "csv_entropy_all",
         "baseline_comparison", "ablation", "mia_evaluation",
+        "delta_h_empirical",
     ]
     to_run = [t for name in to_run for t in (PAPER_FIGURES_TASKS if name == "paper_figures" else [name])]
 
@@ -65,6 +66,7 @@ def main():
         "baseline_comparison": ("experiments.run_baseline_comparison", "main"),
         "ablation": ("experiments.run_ablation", "main"),
         "mia_evaluation": ("experiments.run_mia_evaluation", "main"),
+        "delta_h_empirical": ("experiments.run_delta_h_empirical", "main"),
     }
 
     for name in to_run:
