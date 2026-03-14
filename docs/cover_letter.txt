@@ -1,0 +1,12 @@
+Dear Editor,
+
+We are pleased to submit our manuscript titled "REAEDP: Entropy-Calibrated Differentially Private Data Release with Formal Guarantees and Attack-Based Evaluation" for consideration for publication in IEEE Transactions on Information Forensics and Security (TIFS).
+
+Scope. The manuscript presents (i) an entropy sensitivity bound for histogram statistics (Theorem 3) that enables calibrated differentially private release of histogram entropy, and (ii) a synthetic-data mechanism with a formal differential privacy guarantee under stated conditions (Theorem 4). It further includes baseline comparison, parameter studies, and attack-based evaluation (membership inference and linkage-style) on public tabular datasets. The experimental results support the framework in the tested setting: empirical entropy change remains below the theoretical bound, and attack performance moves toward random-guess behavior as the privacy parameter decreases.
+
+Fit with TIFS. The manuscript fits TIFS because it studies privacy-preserving data release, information-theoretic sensitivity analysis, and attack-based evaluation of output-side inference risks. It combines theorem-level formal guarantees with empirical validation and algorithmic implementation.
+
+We confirm that the manuscript has not been published elsewhere and is not under consideration by another journal. All authors have approved the manuscript and agree with its submission to TIFS.
+
+Sincerely,
+The Authors

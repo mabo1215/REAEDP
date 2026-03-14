@@ -1,169 +1,196 @@
-\section*{Final Remaining Fixes for the Latest Version}
+\section*{Direct Search-and-Replace Edits}
 
-\subsection*{1. Replace all generic Appendix A proof references in \texttt{main.tex}}
+\subsection*{1. main.tex: Experiments overview appendix reference}
 
-\paragraph{Replace in Theorem 3}
-\begin{quote}
-\texttt{The proof is in Appendix A.}
-\end{quote}
-with
-\begin{quote}
-\texttt{The proof is given in Appendix~B.}
-\end{quote}
+\noindent\textbf{Original}
+\begin{verbatim}
+Noisy-SGD details and supplementary image-noise results are provided in the
+supplementary appendix, with Noisy-SGD in Appendix~I and
+image-noise results in Appendices~I--L.
+\end{verbatim}
 
-\paragraph{Replace in Lemma 1}
-\begin{quote}
-\texttt{Proof is in Appendix A.}
-\end{quote}
-with
-\begin{quote}
-\texttt{Proof is given in Appendix~D.}
-\end{quote}
+\noindent\textbf{Replace with}
+\begin{verbatim}
+Noisy-SGD details and supplementary image-noise results are provided in the
+supplementary appendix, with Noisy-SGD in Appendix~I and
+image-noise results in Appendices~J--L.
+\end{verbatim}
 
-\paragraph{Replace in Lemma 2}
-\begin{quote}
-\texttt{Proof is in Appendix A.}
-\end{quote}
-with
-\begin{quote}
-\texttt{Proof is given in Appendix~G.}
-\end{quote}
+\subsection*{2. main.tex: Experimental setup image-noise appendix reference}
 
-\paragraph{Replace in Lemma 3 and Corollary 1}
-\begin{quote}
-\texttt{Proof is in Appendix A.}
-\end{quote}
-with
-\begin{quote}
-\texttt{Proof is given in Appendix~E.}
-\end{quote}
+\noindent\textbf{Original}
+\begin{verbatim}
+Supplementary image-noise utility results are provided in the
+supplementary appendix (Appendices~I--L), with detailed metric
+comparison in Appendix~L, as supporting evidence only.
+\end{verbatim}
 
-\paragraph{Replace in Lemma 4}
-\begin{quote}
-\texttt{Proof is in Appendix A.}
-\end{quote}
-with
-\begin{quote}
-\texttt{Proof is given in Appendix~F.}
-\end{quote}
+\noindent\textbf{Replace with}
+\begin{verbatim}
+Supplementary image-noise utility results are provided in the
+supplementary appendix (Appendices~J--L), with detailed metric
+comparison in Appendix~L, as supporting evidence only.
+\end{verbatim}
 
-\paragraph{Replace in Theorem 4}
-\begin{quote}
-\texttt{Proof is in Appendix A.}
-\end{quote}
-with
-\begin{quote}
-\texttt{Proof is given in Appendix~H.}
-\end{quote}
+\subsection*{3. main.tex: Membership inference appendix reference}
 
-\subsection*{2. Replace malformed appendix references such as \texttt{Appendix H0a}}
+\noindent\textbf{Original}
+\begin{verbatim}
+Supplementary image-noise utility results are provided in the
+supplementary appendix (Appendices~I--L) and are included only as
+supporting evidence, not as a central part of the main theorem-to-
+mechanism evaluation pipeline.
+\end{verbatim}
 
-\paragraph{Replace}
-\begin{quote}
-\texttt{Appendix H0a}
-\end{quote}
-with the correct appendix letter, depending on context.
+\noindent\textbf{Replace with}
+\begin{verbatim}
+Supplementary image-noise utility results are provided in the
+supplementary appendix (Appendices~J--L) and are included only as
+supporting evidence, not as a central part of the main theorem-to-
+mechanism evaluation pipeline.
+\end{verbatim}
 
-\paragraph{Recommended replacements}
-For supplementary conceptual background:
-\begin{quote}
-\texttt{Appendix~J}
-\end{quote}
+\subsection*{4. main.tex: Table III synthetic image source}
 
-For supplementary image-noise and additional experiments:
-\begin{quote}
-\texttt{Appendix~K}
-\end{quote}
+\noindent\textbf{Original}
+\begin{verbatim}
+Synthetic 64 × 64 image & Image & Supplementary appendix (Appendix~I).
+\end{verbatim}
 
-\paragraph{Example replacement sentence}
-\begin{quote}
-\texttt{
-Supplementary image-noise utility results are provided in Appendix~K and are included only as supporting evidence, not as a central part of the main theorem-to-mechanism evaluation pipeline.
-}
-\end{quote}
+\noindent\textbf{Replace with}
+\begin{verbatim}
+Synthetic 64 × 64 image & Image & Supplementary appendix (Appendices~J--L).
+\end{verbatim}
 
-\subsection*{3. Replace the current discussion paragraph with a safer final version}
+\subsection*{5. appendix\_main.tex: remove duplicated paragraph in Appendix K}
 
-\begin{quote}
-\texttt{
-The experiments support the following conclusions.
-First, the tested Laplace, Gaussian, and DP synthetic baselines remain below the theoretical entropy bound, while MIA and linkage-style attack performance moves toward random-guess behavior as \(\varepsilon\) decreases.
-This is consistent with the intended privacy--utility tradeoff of the release mechanism in the tested setting.
-Second, the privacy test used by the synthetic-data mechanism \(F\) retains a non-negligible pass rate under suitable parameter choices, supporting the practical feasibility of non-interactive synthetic release.
-Third, the empirical entropy sensitivity remains below the theoretical bound from Theorem~3 across the tested regimes, indicating that the bound is informative for calibration.
-Fourth, the real-data and multi-dataset experiments suggest that the entropy-based DP release pipeline is applicable across multiple tabular domains in the tested setting.
-However, the explicit empirical evaluation remains limited to the tested attack models and does not yet include a direct benchmark for attribute inference.
-}
-\end{quote}
+\noindent\textbf{This paragraph currently appears twice. Keep one copy only and delete the duplicate.}
 
-\subsection*{4. Replace the current conclusion with a synchronized final version}
+\noindent\textbf{Paragraph to keep once}
+\begin{verbatim}
+The left panel shows PSNR and the right panel shows MAE;
+both are evaluated for $\varepsilon \in [0.1, 4]$ on a $64 \times 64$
+synthetic image. The figure illustrates the $(\varepsilon,\delta)$-DP
+utility--privacy tradeoff: smaller $\varepsilon$ implies more noise
+(lower PSNR, higher MAE). At small $\varepsilon$ (e.g., 0.1) the
+image is heavily perturbed; at $\varepsilon = 4$ the curves approach
+a plateau. Laplace and Gaussian behave similarly; small
+differences are due to the different noise distributions.
+\end{verbatim}
 
-\begin{quote}
-\texttt{
-We have proposed REAEDP, a differential privacy framework for entropy-calibrated data release with formal guarantees and attack-based evaluation.
-The main technical contributions are twofold:
-first, an explicit sensitivity bound for histogram entropy (Theorem~3), which enables calibrated differentially private release of histogram statistics;
-second, a synthetic-data release mechanism \(F\) with a formal \((\varepsilon,\delta)\)-DP guarantee under the stated parameter domain (Theorem~4).
-Across multiple public tabular datasets, the experiments show that the empirical entropy sensitivity remains below the theoretical bound in the tested regime,
-that standard Laplace and Gaussian histogram baselines achieve comparable behavior,
-and that membership-inference and linkage-style attack performance moves toward random-guess behavior as \(\varepsilon\) decreases.
-These results support the use of REAEDP as an algorithmic release pipeline for privacy-preserving data publication in the tested settings.
+\subsection*{6. appendix\_main.tex: convert inline bold headings to formal subsection headings}
 
-This work also has several limitations.
-The entropy-based release depends on histogram discretization and may be sensitive to bin selection, especially in high-dimensional settings.
-Scalability to very high-dimensional or very large-scale data may require approximate or distributed implementations.
-The RKHS/Wiener-kernel analysis relies on finite-dimensional numerical approximation of an infinite-dimensional space,
-and tightening the associated approximation error under differential privacy remains open.
-Finally, while the paper explicitly evaluates membership inference and a linkage-style attack,
-stronger experimental coverage of attribute inference and broader multimodal or federated settings is left for future work.
-}
-\end{quote}
+\noindent\textbf{Original}
+\begin{verbatim}
+\textbf{Domain and range.} Let $D=\{x_1,\dots,x_n\}$ be a dataset over universe $\mathcal{U}$.
+The mechanism $\mathcal{F}$ is a randomized map that outputs a synthetic record $y \in \mathcal{U}$.
 
-\subsection*{5. Replace the Appendix K summary-table wording or delete the table}
+\textbf{Input.} The mechanism takes as input the dataset $D$ together with tuning parameters
+$k,t,\gamma,\varepsilon_0$ as used in Theorem~\ref{thm5}.
 
-\paragraph{Best option}
-Delete the summary table entirely.
+\textbf{Seed selection.} A seed $s$ is drawn uniformly at random from $D$:
+\end{verbatim}
 
-\paragraph{If you keep it, rename and rewrite it}
-Replace the table title with:
-\begin{quote}
-\texttt{Table~K1. Supplementary figures and their experimental content.}
-\end{quote}
+\noindent\textbf{Replace with}
+\begin{verbatim}
+\subsection*{Domain and range}
+Let $D=\{x_1,\dots,x_n\}$ be a dataset over universe $\mathcal{U}$.
+The mechanism $\mathcal{F}$ is a randomized map that outputs a synthetic record $y \in \mathcal{U}$.
 
-\paragraph{Do not use phrases such as}
-\begin{quote}
-\texttt{supports abstract contribution (i)}
-\end{quote}
-or
-\begin{quote}
-\texttt{connection to theory}
-\end{quote}
+\subsection*{Input}
+The mechanism takes as input the dataset $D$ together with tuning parameters
+$k,t,\gamma,\varepsilon_0$ as used in Theorem~\ref{thm5}.
 
-\paragraph{Use neutral labels instead}
-\begin{quote}
-\texttt{entropy-sensitivity validation}
-\end{quote}
-\begin{quote}
-\texttt{supplementary image-noise utility comparison}
-\end{quote}
-\begin{quote}
-\texttt{synthetic mechanism behavior}
-\end{quote}
+\subsection*{Seed selection}
+A seed $s$ is drawn uniformly at random from $D$:
+\end{verbatim}
 
-\subsection*{6. Recommended final appendix structure}
+\subsection*{7. appendix\_main.tex: convert the remaining inline headings}
 
-\begin{quote}
-\texttt{
-A. Proof of Theorems 1 and 2 \\
-B. Proof of Theorem~3 (Shannon entropy sensitivity under replacement adjacency) \\
-C. Renyi entropy sensitivity \\
-D. Proof of Lemma~1 \\
-E. Proof of Lemma~3 and Corollary~1 \\
-F. Proof of Lemma~4 \\
-G. Proof of Lemma~2 \\
-H. Proof of Theorem~4 (Differential privacy of \(F\)) \\
-I. Sufficient parameter domain for Theorem~4 \\
-J. Supplementary conceptual background \\
-K. Supplementary image-noise and additional experiments
-}
-\end{quote}
+\noindent\textbf{Original}
+\begin{verbatim}
+\textbf{Candidate generation.} Given the seed $s$, a candidate $y$ is sampled from a
+seed-dependent proposal distribution $p_s(\cdot)$ over $\mathcal{U}$.
+
+\textbf{Partition rule.} For each candidate $y$, each seed $s$ is assigned a partition index $I_s(y)$.
+
+\textbf{Privacy-test random variable.} Let $L$ be an integer-valued random variable,
+independent of the seed-selection and candidate-sampling steps.
+
+\textbf{Acceptance rule.} Given $(D,s,y)$ and the partition index $j=I_s(y)$, the privacy test
+accepts the candidate with probability
+\[
+\mathrm{pt}(D,j,y)=\Pr\{L \ge k-|C_j(D,y)|\}.
+\]
+
+\textbf{Output and termination.} The mechanism $\mathcal{F}$ repeatedly performs the above
+steps until a candidate is accepted, and outputs the accepted $y$.
+\end{verbatim}
+
+\noindent\textbf{Replace with}
+\begin{verbatim}
+\subsection*{Candidate generation}
+Given the seed $s$, a candidate $y$ is sampled from a
+seed-dependent proposal distribution $p_s(\cdot)$ over $\mathcal{U}$.
+
+\subsection*{Partition rule}
+For each candidate $y$, each seed $s$ is assigned a partition index $I_s(y)$.
+
+\subsection*{Privacy-test random variable}
+Let $L$ be an integer-valued random variable,
+independent of the seed-selection and candidate-sampling steps.
+
+\subsection*{Acceptance rule}
+Given $(D,s,y)$ and the partition index $j=I_s(y)$, the privacy test
+accepts the candidate with probability
+\[
+\mathrm{pt}(D,j,y)=\Pr\{L \ge k-|C_j(D,y)|\}.
+\]
+
+\subsection*{Output and termination}
+The mechanism $\mathcal{F}$ repeatedly performs the above
+steps until a candidate is accepted, and outputs the accepted $y$.
+\end{verbatim}
+
+\subsection*{8. Optional wording cleanup for the section opening}
+
+\noindent\textbf{Original}
+\begin{verbatim}
+The main contributions of this section are entropy calibration
+(Theorem~3, $\Delta H$ bound and calibrated histogram release)
+and the synthetic-data mechanism $F$ (Theorem~4, Wiener kernel
+and privacy test).
+\end{verbatim}
+
+\noindent\textbf{Replace with}
+\begin{verbatim}
+This section evaluates two main components of the paper:
+entropy calibration (Theorem~3, $\Delta H$ bound and calibrated
+histogram release) and the synthetic-data mechanism $F$
+(Theorem~4, Wiener kernel and privacy test).
+\end{verbatim}
+
+\subsection*{9. Final global source check}
+
+\noindent\textbf{Search for}
+\begin{verbatim}
+Appendices~I--L
+Appendix~I).
+Appendix~I and
+The left panel shows PSNR and the right panel shows MAE;
+\textbf{Domain and range.}
+\textbf{Candidate generation.}
+\textbf{Partition rule.}
+H0a
+??
+\end{verbatim}
+
+\noindent\textbf{After editing, verify}
+\begin{verbatim}
+Appendix~I      -> only for Noisy-SGD
+Appendices~J--L -> only for image-noise material
+the PSNR/MAE paragraph appears only once
+mechanism F headings use \subsection* form
+no H0a remains
+no ?? remains
+\end{verbatim}
