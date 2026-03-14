@@ -10,3 +10,29 @@ We confirm that the manuscript has not been published elsewhere and is not under
 
 Sincerely,
 The Authors
+
+---
+ANSWERS TO EDITORIAL QUESTIONS (each answer: one paragraph, under 500 words)
+---
+
+1. Explain in detail why the contribution of this manuscript is within the scope of the IEEE Transactions on Information Forensics & Security? (max 500 words)
+
+The manuscript is within TIFS scope because it addresses output-side inference risks (membership inference and linkage) when releasing statistics or synthetic data, provides formal differential-privacy guarantees with entropy-calibrated noise, and combines sensitivity analysis with attack-based evaluation, aligning with the journal’s focus on information security and forensics.
+
+---
+
+2. Why is the contribution significant (What impact will it have)? (max 500 words)
+
+The contribution is significant because it gives the first explicit entropy sensitivity bound for histogram release enabling calibrated DP, specifies a synthetic-data mechanism with (ε,δ)-DP at theorem level, and links theory to practice through baseline comparison and MIA/linkage attack evaluation on public datasets.
+
+---
+
+3. What are the three papers in the published literature most closely related to this paper? (Full citation details, including DOI where possible.) (max 500 words)
+
+(1) C. Dwork and A. Roth, "The Algorithmic Foundations of Differential Privacy," Found. Trends Theor. Comput. Sci., DOI: 10.1561/0400000042; (2) C. Dwork, F. McSherry, K. Nissim, "Calibrating Noise to Sensitivity in Private Data Analysis," Proc. TCC,2006,DOI: 10.1007/11681878_14; (3) S. Song, K. Chaudhuri, "Stochastic gradient descent with differentially private updates" IEEE GlobalSIP, DOI: 10.1109/GlobalSIP.2013.6736861.
+
+---
+
+4. What is distinctive/new about the current paper relative to these previously published works? (max 500 words)
+
+Relative to Dwork and Roth we add entropy sensitivity bounds and a concrete (ε,δ)-DP synthetic-data mechanism with attack evaluation; relative to Dwork et al. on calibrating noise we extend calibration to histogram entropy and combine it with mechanism F and attack evaluation; relative to Song et al. we focus on non-interactive release and entropy calibration rather than training-time privacy.
