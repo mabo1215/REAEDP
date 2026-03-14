@@ -1,11 +1,11 @@
 # 审稿意见修改进度（Top-Tier Journal Style Review）
 
 **更新日期：** 2026-03  
-**当前进度：** 约 **100%**（已完成 59 条）
+**当前进度：** 约 **100%**（已完成 62 条）
 
 ---
 
-## 一、已完成的审稿意见（共 59 条）
+## 一、已完成的审稿意见（共 62 条）
 
 每条包含：**序号 | 状态 | 审稿意见概要 | 修改说明**
 
@@ -70,6 +70,9 @@
 | **57** | 已改 | **Final-Check P7 实验写作微调** | “All experiments were run with fixed random seed …” 改为 “Unless otherwise stated, experiments were run with a fixed random seed … to reduce variability across repeated trials”；Real-data 段 “This illustrates that entropy-based DP release applies …” 改为 “illustrates the applicability of the entropy-based DP release pipeline … in the tested setting”。 |
 | **58** | 已改 | **Final-Check P8 结论最终核对** | 结论第一段仅强调两条定理级贡献（熵敏感度上界、机制 $\\mathcal{F}$ 的 $(\\varepsilon,\\delta)$-DP 保证）与实验结果；RKHS/Wiener 与 image-noise 仅在 Limitations 中作为 secondary/supplementary 出现，并以审稿建议的 closing sentence 收尾。 |
 | **59** | 已改 | **编号 9 全稿 editorial pass** | 弱证据句弱化（Discussion 中 shows→indicates、confirms→indicates；(6) 补 “in the tested setting”）；main.tex 与 appendix_main.tex 均加入 hyperref 以稳定交叉引用并避免 PDF 出现 ??；符号与 \\ref/\\label 已核对；编译顺序说明已纳入“未完成”转“已改”说明。 |
+| **60** | 已改 | **revision_suggestions.tex 附录引用与版式** | 正文 image-noise 附录引用统一为 Appendices~J--L（非 I--L），Noisy-SGD 为 Appendix~I；Table~III 合成图像行改为 Supplementary appendix (Appendices~J--L)；详细 metric 比较处用 Appendix~L；附录 mechanism $\\mathcal{F}$ 已为 \\subsection* 形式（Domain and range, Input, Seed selection 等）；引用处使用非断行空格（~）。 |
+| **61** | 已改 | **Final TeX fixes (revision_suggestions.tex)** | 附录图/表编号改为 Supplementary 序列：在 \\appendix 后增加 \\thefigure=S\\arabic{figure}、\\thetable=S\\arabic{table} 及计数器归零，附录中图为 Fig.~S1、S2…，表为 Table~S1…；附录 image-noise 小节措辞改为 “The following image-noise experiments are included as supporting material; the main text focuses on entropy calibration and the synthetic-data mechanism $\\mathcal{F}$.”；mechanism $\\mathcal{F}$ 小标题已为 \\subsection* 形式。 |
+| **62** | 已改 | **Final Review (revision_suggestions.tex)** | 最终核对：正文附录引用（Appendix~I / Appendices~J--L）、Table~III 合成图像指向、去重段落、无 H0a/??、build 脚本均已就绪；附录 mechanism $\\mathcal{F}$ 八处小标题已全部使用 \\subsection*（Domain and range, Input, Seed selection, Candidate generation, Partition rule, Privacy-test random variable, Acceptance rule, Output and termination）；附录 Fig.~S1/Table~S1 编号已生效。无新增强制修改。 |
 
 ---
 
