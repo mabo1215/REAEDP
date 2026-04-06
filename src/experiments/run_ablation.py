@@ -1,6 +1,6 @@
 """
 Ablation: effect of bins and n on entropy error; Theorem 4 bound holds across settings.
-Output: paper/fig/fig_ablation.png
+Output: paper/figs/fig_ablation.png
 """
 import sys
 import os
@@ -13,10 +13,9 @@ import pandas as pd
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from reaedp.entropy import shannon_entropy, entropy_sensitivity_bound
 from reaedp.dp_mechanisms import laplace_mechanism
+from project_paths import DATA_DIR, PAPER_FIG_DIR, resolve_workspace_path
 
-ROOT = os.path.join(os.path.dirname(__file__), "..")
-FIG_DIR = os.path.join(ROOT, "paper", "fig")
-DATA_DIR = os.path.join(ROOT, "data")
+FIG_DIR = str(PAPER_FIG_DIR)
 
 
 def main(config=None):
@@ -25,10 +24,9 @@ def main(config=None):
     rng = np.random.default_rng(seed)
     epsilon = config.get("epsilon", 1.0)
     n_trials = config.get("n_trials", 15)
-    csv_path = config.get("input") or os.path.join(DATA_DIR, "y_amazon-google-large.csv")
+    csv_path = config.get("input") or str(DATA_DIR / "y_amazon-google-large.csv")
     column = config.get("column", "y")
-    if not os.path.isabs(csv_path):
-        csv_path = os.path.join(ROOT, csv_path)
+    csv_path = str(resolve_workspace_path(csv_path))
 
     if not os.path.isfile(csv_path):
         print(f"CSV not found: {csv_path}. Skipping ablation.")

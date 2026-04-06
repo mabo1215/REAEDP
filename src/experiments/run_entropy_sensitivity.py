@@ -8,6 +8,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from reaedp.entropy import shannon_entropy, entropy_sensitivity_bound, sensitivity_entropy_adjacent
+from project_paths import resolve_workspace_path
 
 
 def main(config=None):
@@ -43,6 +44,7 @@ def main(config=None):
     print(f"Bound holds: {max_delta <= bound + 1e-6}")
 
     if out_csv:
+        out_csv = str(resolve_workspace_path(out_csv))
         os.makedirs(os.path.dirname(out_csv) or ".", exist_ok=True)
         with open(out_csv, "w") as f:
             f.write("n,m,bound,max_delta,bound_holds\n")

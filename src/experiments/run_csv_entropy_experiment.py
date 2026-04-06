@@ -1,7 +1,7 @@
 """
 Real-data experiment: load a CSV (e.g. y_amazon-google-large.csv), compute histogram
 and Shannon entropy, add DP noise to the histogram, and plot original vs private.
-Saves figure to paper/fig/ for the paper.
+Saves figure to paper/figs/ for the paper.
 """
 import sys
 import os
@@ -15,9 +15,9 @@ import pandas as pd
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from reaedp.entropy import shannon_entropy, entropy_sensitivity_bound
 from reaedp.dp_mechanisms import laplace_mechanism
+from project_paths import PAPER_FIG_DIR, resolve_workspace_path
 
-ROOT = os.path.join(os.path.dirname(__file__), "..")
-FIG_DIR = os.path.join(ROOT, "paper", "fig")
+FIG_DIR = str(PAPER_FIG_DIR)
 
 
 def main(config=None):
@@ -51,8 +51,7 @@ def main(config=None):
     seed = config.get("seed", 42)
     rng = np.random.default_rng(seed)
 
-    if not os.path.isabs(input_path):
-        input_path = os.path.join(ROOT, input_path)
+    input_path = str(resolve_workspace_path(input_path))
     if not os.path.isfile(input_path):
         print(f"CSV not found: {input_path}. Skip or set config 'input'.")
         return
@@ -104,6 +103,7 @@ def main(config=None):
     print(f"  n={n}, bins={n_bins}, H_orig={H_orig:.4f}, H_noisy={H_noisy:.4f}, Delta_H bound={bound:.6f}")
 
     if out_csv:
+        out_csv = str(resolve_workspace_path(out_csv))
         os.makedirs(os.path.dirname(out_csv) or ".", exist_ok=True)
         with open(out_csv, "w") as f:
             f.write("dataset,n,bins,epsilon,H_orig,H_noisy,Delta_H_bound\n")

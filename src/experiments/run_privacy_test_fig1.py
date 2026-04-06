@@ -7,9 +7,9 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from project_paths import PAPER_FIG_DIR
 
-ROOT = os.path.join(os.path.dirname(__file__), "..")
-FIG_DIR = os.path.join(ROOT, "paper", "fig")
+FIG_DIR = str(PAPER_FIG_DIR)
 
 
 def pass_test(k: int, t: int, gamma: float, rng: np.random.Generator) -> bool:

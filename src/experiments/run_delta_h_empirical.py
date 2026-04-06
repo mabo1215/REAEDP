@@ -2,7 +2,7 @@
 Empirical entropy sensitivity: estimate Delta_H_hat = max_{D~D'} |H(D)-H(D')|
 over adjacent histogram pairs (replacement adjacency) and compare to theoretical bound.
 Small-scale, controlled synthetic experiment for Theorem 4 alignment.
-Output: paper/fig/fig_delta_h_empirical.png, data/delta_h_empirical.csv
+Output: paper/figs/fig_delta_h_empirical.png, data/delta_h_empirical.csv
 """
 import sys
 import os
@@ -15,10 +15,10 @@ import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from reaedp.entropy import shannon_entropy, entropy_sensitivity_bound
+from project_paths import DATA_DIR, PAPER_FIG_DIR
 
-ROOT = os.path.join(os.path.dirname(__file__), "..")
-FIG_DIR = os.path.join(ROOT, "paper", "fig")
-DATA_DIR = os.path.join(ROOT, "data")
+FIG_DIR = str(PAPER_FIG_DIR)
+DATA_DIR = str(DATA_DIR)
 
 
 def empirical_delta_h(counts: np.ndarray, rng: np.random.Generator, n_samples: int = 5000) -> float:

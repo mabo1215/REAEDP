@@ -4,7 +4,7 @@ Adversary sees one release M(D) or M(D') with D' = D \\cup {x}; guess which.
 Features: entropy of release, total count; classifier: logistic regression.
 Report: accuracy and AUC vs epsilon, with mean and 95%% CI over repeated runs.
 Linkage-style attack: guess D vs D' by which reference release is closer (L2).
-Output: paper/fig/fig_mia.png, data/mia_results.csv
+Output: paper/figs/fig_mia.png, data/mia_results.csv
 """
 import sys
 import os
@@ -17,10 +17,9 @@ import pandas as pd
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from reaedp.entropy import shannon_entropy
 from reaedp.dp_mechanisms import laplace_mechanism
+from project_paths import DATA_DIR, PAPER_FIG_DIR, resolve_workspace_path
 
-ROOT = os.path.join(os.path.dirname(__file__), "..")
-FIG_DIR = os.path.join(ROOT, "paper", "fig")
-DATA_DIR = os.path.join(ROOT, "data")
+FIG_DIR = str(PAPER_FIG_DIR)
 
 
 def run_one_mia(eps: float, rng: np.random.Generator, n_trials: int, bins: int,
@@ -103,10 +102,9 @@ def main(config=None):
     n_runs = config.get("n_runs", 5)
     bins = config.get("bins", 30)
     max_rows = config.get("max_rows", 10000)
-    csv_path = config.get("input") or os.path.join(DATA_DIR, "house-prices-train.csv")
+    csv_path = config.get("input") or str(DATA_DIR / "house-prices-train.csv")
     column = config.get("column", "SalePrice")
-    if not os.path.isabs(csv_path):
-        csv_path = os.path.join(ROOT, csv_path)
+    csv_path = str(resolve_workspace_path(csv_path))
 
     if not os.path.isfile(csv_path):
         print(f"CSV not found: {csv_path}. Skipping MIA.")
@@ -151,7 +149,7 @@ def main(config=None):
         "linkage_accuracy": linkage_accs,
     })
     res_df.to_csv(os.path.join(DATA_DIR, "mia_results.csv"), index=False)
-    print(f"Saved {DATA_DIR}/mia_results.csv")
+    print(f"Saved {os.path.join(str(DATA_DIR), 'mia_results.csv')}")
 
     os.makedirs(FIG_DIR, exist_ok=True)
     fig, ax = plt.subplots(figsize=(5, 3.5))

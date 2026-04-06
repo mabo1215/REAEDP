@@ -21,6 +21,7 @@ from reaedp.image_noise import (
     image_psnr,
     image_mae,
 )
+from project_paths import resolve_workspace_path
 
 
 def create_demo_image(size: Tuple[int, int] = (64, 64)) -> np.ndarray:
@@ -54,7 +55,7 @@ def main(config=None):
         }
 
     input_path = config.get("input", "")
-    output_dir = config.get("output", "data/image_noise")
+    output_dir = str(resolve_workspace_path(config.get("output", "data/image_noise")))
     epsilon = config.get("epsilon", 1.0)
     delta = config.get("delta", 1e-5)
     mechanism = config.get("mechanism", "both")
@@ -63,6 +64,9 @@ def main(config=None):
 
     rng = np.random.default_rng(seed)
     os.makedirs(output_dir, exist_ok=True)
+
+    if input_path:
+        input_path = str(resolve_workspace_path(input_path))
 
     if input_path and os.path.isfile(input_path):
         paths = [input_path]
@@ -132,6 +136,7 @@ def main(config=None):
         print(r)
 
     if out_csv:
+        out_csv = str(resolve_workspace_path(out_csv))
         os.makedirs(os.path.dirname(out_csv) or ".", exist_ok=True)
         headers = ["name", "epsilon", "delta", "psnr_laplace", "mae_laplace", "psnr_gaussian", "mae_gaussian"]
         with open(out_csv, "w") as f:

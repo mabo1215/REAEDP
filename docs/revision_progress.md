@@ -88,9 +88,9 @@
 
 ## 三、文件与命令速查
 
-- **论文与图**：`paper/main.tex`、`paper/appendix_main.tex`，图在 `paper/fig/`。
+- **论文与图**：`paper/main.tex`、`paper/appendix_main.tex`，图在 `paper/figs/`。
 - **生成全部论文图**：`python main.py --run paper_figures`。
 - **仅生成新增实验图**：`python main.py --run baseline_comparison ablation mia_evaluation delta_h_empirical`。
-- **编译正文 PDF（不含附录）**：在 `paper/` 目录运行 `build_paper.bat` 或 `bash build_paper.sh`，生成 `main.pdf`。
+- **编译正文与附录 PDF**：在 `paper/` 目录运行 `build.bat`，中间文件写入 `paper/build/`，并将 `main.pdf` 与 `appendix_main.pdf` 复制回 `paper/`。
 - **编译附录 PDF（独立文件）**：同上脚本会顺序编译 `appendix_main.tex`，生成 `appendix_main.pdf`，正文与附录之间的交叉引用已通过 `xr` 配置好。
 - **Cover letter**：`docs/cover_letter.txt`（纯英文、无占位符；说明本工作侧重隐私机制与安全数据发布，更适合 TIFS 等隐私/安全期刊）。

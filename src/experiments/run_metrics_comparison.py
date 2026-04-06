@@ -18,9 +18,9 @@ from reaedp.image_noise import (
     image_mae,
     image_ssim_simple,
 )
+from project_paths import PAPER_FIG_DIR
 
-ROOT = os.path.join(os.path.dirname(__file__), "..")
-FIG_DIR = os.path.join(ROOT, "paper", "fig")
+FIG_DIR = str(PAPER_FIG_DIR)
 
 
 def main(config=None):

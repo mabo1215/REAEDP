@@ -11,9 +11,9 @@ import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from reaedp.wiener_kernel import generate_chi_square_process, private_rkhs_mean
+from project_paths import PAPER_FIG_DIR, resolve_workspace_path
 
-ROOT = os.path.join(os.path.dirname(__file__), "..")
-FIG_DIR = os.path.join(ROOT, "paper", "fig")
+FIG_DIR = str(PAPER_FIG_DIR)
 
 
 def main(config=None):
@@ -51,6 +51,7 @@ def main(config=None):
         print(f"Saved {out}")
 
     if out_csv:
+        out_csv = str(resolve_workspace_path(out_csv))
         os.makedirs(os.path.dirname(out_csv) or ".", exist_ok=True)
         with open(out_csv, "w") as f:
             f.write("rho,index,t,original_mean,private_mean\n")
