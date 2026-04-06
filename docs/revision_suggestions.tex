@@ -1,71 +1,190 @@
-\section*{Final Review}
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{parskip}
 
-\subsection*{What is now correct}
+\title{\textbf{Peer Review Report}\\[0.5em]
+\large Manuscript: ``REAEDP: Entropy-Calibrated Differentially Private Data Release\\
+with Formal Guarantees and Attack-Based Evaluation''\\[0.3em]
+\normalsize Target Venue: \textit{IEEE Transactions on Information Forensics and Security}}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+%--------------------------------------------------------------
+\section{Summary}
+%--------------------------------------------------------------
+
+The manuscript proposes \textsc{REAEDP}, a framework for differentially private (DP) data release that combines three components: (1) an explicit sensitivity bound for Shannon entropy under the replacement adjacency model (Theorem~3), extended heuristically to R\'{e}nyi entropy; (2) a synthetic-data mechanism $\mathcal{F}$ built around a privacy-test acceptance rule, shown to satisfy $(\varepsilon,\delta)$-DP under add/remove adjacency (Theorem~4); and (3) experimental evaluation including baseline comparison (Laplace vs.\ Gaussian), membership-inference attack (MIA), and a linkage-style attack.
+
+The paper addresses a genuine need in the DP literature---making entropy-based calibration concrete and combining it with formal guarantees and empirical attack evaluation. However, the manuscript has several significant issues across theory, experiments, and presentation that must be addressed before it meets the standards of IEEE TIFS.
+
+%--------------------------------------------------------------
+\section{Overall Recommendation}
+%--------------------------------------------------------------
+
+\textbf{Decision: Major Revision.}
+
+The core ideas are of interest, but substantial revisions are required in the following areas: (a)~tightening the theoretical claims and closing gaps in proofs, (b)~strengthening the experimental evaluation to support stronger empirical claims, and (c)~resolving numerous inconsistencies in theorem numbering, notation, and cross-references throughout the manuscript.
+
+%--------------------------------------------------------------
+\section{Major Comments}
+%--------------------------------------------------------------
+
+\subsection{Theoretical Issues}
+
+\begin{enumerate}[label=\textbf{M\arabic*.}, leftmargin=*, wide=0pt]
+
+\item \textbf{Inconsistent theorem numbering between main text and appendix.}
+In the main text, Theorem~3 is the Shannon entropy sensitivity result and Theorem~4 is the DP guarantee for $\mathcal{F}$. However, in the supplementary appendix these are labeled ``Theorem~3'' and ``Theorem~4'' respectively, which coincidentally agrees. Yet the \LaTeX\ source labels them \texttt{thm4} and \texttt{thm5}, while the Discussion section refers to ``Theorem~3'' (entropy bound) and ``Theorem~4'' ($\mathcal{F}$ DP guarantee) in a way that is inconsistent with the internal cross-references in the code. The Conclusion paragraph reads: ``the main technical results are an explicit sensitivity bound \ldots (Theorem~3) and an $(\varepsilon,\delta)$-DP guarantee \ldots (Theorem~4)'', while the body of the paper labels these \texttt{thm4} and \texttt{thm5}. This must be corrected throughout; every theorem label should be verified to match the rendered number.
+
+\item \textbf{The Rényi entropy sensitivity bound (Appendix C) is not integrated into the calibration pipeline.}
+The abstract and introduction both highlight Rényi entropy as a key contribution. However, Appendix~C provides only a stand-alone bound $\Delta H_\alpha \leq C_\alpha / n$ without: (i)~a corresponding algorithm that uses this bound to calibrate noise, (ii)~an experiment that validates the bound empirically, or (iii)~any discussion of how to choose $\alpha$ in practice beyond the qualitative observation in Table~S1. The Rényi extension cannot be listed as a main contribution unless these gaps are filled. Either include a full calibration algorithm using $\Delta H_\alpha$ and validate it experimentally, or demote the R\'{e}nyi claim to a remark.
+
+\item \textbf{The proof of Theorem 3 has a gap in Case 2.}
+In the appendix proof of Theorem~3, Case~2 ($c_{j_1} = 1$) concludes $\Delta H \leq \frac{1}{n}(2 + \frac{1}{\ln 2} + 2\log_2 n)$, but the bound on $c_{j_1}\log_2(1 + 1/c_{j_1}) \leq 1/\ln 2$ is applied while simultaneously bounding $c_{j_2}\log_2 c_{j_2} - (c_{j_2}-1)\log_2(c_{j_2}-1)$ term, which disappears without justification when $c_{j_2} \geq 1$. The case analysis must spell out the treatment of the $c_{j_2}$ term in Case~2, as it is not zero in general and contributes to the final bound. The authors should provide a complete, self-contained case analysis.
+
+\item \textbf{Mechanism $\mathcal{F}$ is underspecified for practical use.}
+The proposal distribution $p_s(\cdot)$, the partition function $I_s(y)$, and the distribution of $L$ are left entirely abstract in the main text and appendix. Theorem~4 thus provides an $(\varepsilon,\delta)$-DP guarantee for a \emph{class} of mechanisms rather than a specific, deployable mechanism. This is acceptable in principle, but the paper must then clearly state this limitation and explain what additional design choices a practitioner must make. Currently, Algorithm~1 calls ``run privacy test $\mathrm{pt}(D,j,y)$'' without specifying how $L$ is distributed or how $I_s(y)$ is computed, making the algorithm not reproducible. The authors should either: (a)~specify a concrete instantiation (e.g., $L \sim \mathrm{Binomial}(k, p)$ for some $p$) and validate it experimentally, or (b)~explicitly reframe Theorem~4 as a template result and add a section on how to instantiate it.
+
+\item \textbf{The $\delta$ bound is not summed over outputs.}
+In Theorem~4, the proof establishes $\Pr\{\mathcal{F}(D') \in Y\} \leq e^\varepsilon \Pr\{\mathcal{F}(D) \in Y\} + \sum_{y \in Y_{t-}} \delta(D', d', y)$, and then bounds $\sum_{y \in Y_{t-}} \delta(D', d', y) \leq e^{-\varepsilon_0(k-t)}$. The step uses $\sum_{y \in U} p_s(y) \leq 1$ for each $s$. However, the bound requires the indicator $\mathbf{1}_{I_{d'}(y) = I_s(y)}$ to ensure there is no double counting across outputs $y$ assigned to different partition cells for the same seed. The argument in Eq.~(25) of the appendix swaps the order of summation over $s \in D'$ and $y \in Y_{t-}$ without verifying that the indicator correctly restricts each $y$ to a unique cell per seed. The authors must verify this step carefully or provide an alternative argument.
+
+\item \textbf{The two adjacency models (replacement and add/remove) are not bridged.}
+Theorem~3 uses replacement adjacency and Theorem~4 uses add/remove adjacency. This is acknowledged in Section~III-A, but there is no composition result or combined guarantee that applies the entropy bound (Theorem~3) under the same adjacency model used by $\mathcal{F}$ (Theorem~4). A practitioner deploying the full pipeline (histogram release \emph{and} synthetic-data release) needs to know whether and how these two components compose. This gap should be addressed either by providing a composition theorem or by clearly stating that the two theorems address disjoint components.
+
+\end{enumerate}
+
+\subsection{Experimental Issues}
+
+\begin{enumerate}[label=\textbf{M\arabic*.}, resume, leftmargin=*, wide=0pt]
+
+\item \textbf{The MIA evaluation is insufficiently strong.}
+The membership-inference attack (Section V-J) uses only two features (entropy and total count of the release) with logistic regression. For a paper targeting IEEE TIFS---a premier security venue---this is a weak adversary. A stronger evaluation should include: (i)~state-of-the-art shadow-model-based MIA \cite{shokri2017membership} or likelihood-ratio attacks \cite{carlini2022membership}, (ii)~MIA applied directly to synthetic records released by mechanism $\mathcal{F}$ rather than to histogram releases, and (iii)~statistical power analysis to confirm that the observed near-random-guess accuracy is due to DP protection rather than insufficient adversary power.
+
+\item \textbf{The linkage-style attack is non-standard and too simple.}
+The linkage attack described (``which of two candidate releases is closer in L2 distance'') is essentially a distinguishing game between adjacent datasets. This directly measures $e^\varepsilon$ distinguishability and is therefore already guaranteed to be near-random by the DP definition for small $\varepsilon$. Reporting this as an independent empirical contribution adds little beyond the theoretical guarantee. A more meaningful attack would involve an adversary with auxiliary data attempting to re-identify or link individuals, as is standard in the record linkage literature.
+
+\item \textbf{The Wiener-kernel experiments lack a formal privacy guarantee verification.}
+Figure~2 shows original vs.\ private RKHS means for three values of $\rho$, but the text does not specify: (i)~what noise mechanism is used to sanitize the RKHS mean, (ii)~what the resulting $(\varepsilon, \delta)$ values are for each $\rho$, and (iii)~how the Gaussian mechanism is applied in the infinite-dimensional setting. Without these details, the Wiener-kernel component of the paper cannot be assessed for correctness.
+
+\item \textbf{Single-run experiments are not reproducible.}
+Table~IV (real-data experiment) reports results for a single run with fixed seed 42. For a result to be meaningful, it should be reported as a mean $\pm$ standard deviation over multiple runs. Additionally, the ``5 repeated runs'' for MIA are insufficient; standard practice requires at least 20--30 runs for confidence interval estimates in privacy experiments.
+
+\item \textbf{Comparison against DP synthetic-data baselines is inadequate.}
+The paper's ``DP synthetic baselines'' are defined as Laplace/Gaussian-noised counts followed by a multinomial sample. These are not standard baselines in the DP synthetic-data literature. The authors should compare against established methods such as PrivSyn \cite{zhang2021privsyn}, RAP \cite{aydore2021differentially}, or AIM \cite{mckenna2022aim}, which provide both privacy guarantees and high-quality synthetic records for tabular data.
+
+\end{enumerate}
+
+%--------------------------------------------------------------
+\section{Minor Comments}
+%--------------------------------------------------------------
+
+\begin{enumerate}[label=\textbf{m\arabic*.}, leftmargin=*, wide=0pt]
+
+\item \textbf{Notation clash: $k$ used for two different quantities.}
+In Theorems~1 and~2 (composition), $k$ denotes the number of composed mechanisms. In Theorem~4 and the mechanism $\mathcal{F}$ description, $k$ denotes the privacy-test threshold. These must be distinguished to avoid confusion; for example, use $K$ for the number of composed mechanisms in the composition theorems.
+
+\item \textbf{Sentence in abstract is misleading.}
+The abstract states ``both membership-inference and linkage-style attack performance move toward random-guess behavior as the privacy parameter decreases.'' This phrasing implies convergence to a mathematically guaranteed bound; however, the experiment measures only a specific, limited adversary. The abstract should qualify this as ``in the tested setting with the implemented attack models.''
+
+\item \textbf{The ``\texttt{REAEDP}'' acronym is not parsed in the introduction.}
+The acronym REAEDP appears to stand for ``Release with Entropy-calibrated And Evaluated Differentially Private'' or similar, but this is never stated. The full expansion should be provided at first use.
+
+\item \textbf{Algorithm~1 mixes two distinct algorithms.}
+Algorithm~1 describes both histogram release and mechanism $\mathcal{F}$ in a single pseudocode block, blurring the boundary between two conceptually separate mechanisms. They should be presented as Algorithm~1 (histogram DP release) and Algorithm~2 (mechanism $\mathcal{F}$) respectively.
+
+\item \textbf{Cross-reference to ``Theorem~\ref{thm4}'' in the Discussion section.}
+The Discussion section (Section~VI) contains: ``which is consistent with the intended role of Theorem~\ref{thm4} as a calibration tool''. In the rendered PDF this refers to the Shannon entropy sensitivity theorem (correctly), but in another paragraph it again cites Theorem~\ref{thm4} in a context that appears to refer to the DP guarantee of $\mathcal{F}$ (Theorem~\ref{thm5}). All cross-references should be carefully audited against the rendered output.
+
+\item \textbf{Missing sensitivity analysis for bin count in histogram DP.}
+Algorithm~1 uses Laplace noise with sensitivity~1 for bin counts. The manuscript should explicitly state and prove (or cite) that the $\ell_1$-sensitivity of a single bin count under replacement adjacency is indeed~1, and that this justifies $\mathrm{Lap}(1/\varepsilon)$ noise. Without this, the noise calibration step in the algorithm is unjustified.
+
+\item \textbf{Figure labels and captions are inconsistent with appendix.}
+In the main text, Figure~3 is labeled ``Entropy sensitivity bound $\Delta_H$ vs.\ dataset size $n$'' and Figure~4 is ``Empirical $\widehat{\Delta H}$ vs.\ theoretical bound.'' In the supplementary appendix, Table~S2 maps Figure~3 to ``$\Delta_H$ bound vs.\ $n$'' and Figure~4 to ``$\widehat{\Delta H}$ mean/max vs.\ $\Delta_H$ bound; ratio by $n$,'' which matches. However, Figure~S3 caption reads ``Additional experiment (see text)'' with no further explanation in the text, and Figure~S4 is not described in the main text at all. The authors should ensure every supplementary figure is explicitly cited and described in the main text or appendix.
+
+\item \textbf{Table~S1 contains a numerical error.}
+Table~S1 reports $C_\alpha = 2|\alpha|/(|1-\alpha|\ln 2)$ for selected $\alpha$. For $\alpha = 0.5$: $C_{0.5} = 2(0.5)/((0.5)\ln 2) = 1/(0.5 \times 0.693) \approx 2.885$, which is reported as $2.89$ (correct). For $\alpha = 1.5$: $C_{1.5} = 2(1.5)/((0.5)\ln 2) = 3/(0.347) \approx 8.66$ (correct). For $\alpha = 2$: $C_2 = 2(2)/((1)\ln 2) = 4/0.693 \approx 5.77$ (correct). For $\alpha = 3$: $C_3 = 2(3)/(2 \times 0.693) = 6/1.386 \approx 4.33$ (correct). For $\alpha = 5$: $C_5 = 2(5)/(4 \times 0.693) = 10/2.772 \approx 3.61$ (correct). For $\alpha = 10$: $C_{10} = 2(10)/(9 \times 0.693) = 20/6.237 \approx 3.207$, reported as $3.21$ (correct within rounding). The table values are numerically consistent; however, the authors should note that $C_\alpha$ is \emph{not} monotonically decreasing in $\alpha$ for $\alpha > 1$: the minimum is not at $\alpha \to 1^+$ but has a different structure. The accompanying text should be corrected to reflect this accurately.
+
+\item \textbf{Missing discussion of composition budget when using both Theorem~3 and Theorem~4.}
+A practitioner using REAEDP would likely release both a privatized histogram (Theorem~3) and synthetic records via $\mathcal{F}$ (Theorem~4). The privacy budget consumed by these two steps under sequential composition (Theorem~1) should be discussed explicitly, including the total $(\varepsilon_\text{total}, \delta_\text{total})$ as a function of the individual parameters.
+
+\item \textbf{Grammar and phrasing issues.}
 \begin{itemize}
-    \item Main-paper appendix references are now consistent:
-    \begin{itemize}
-        \item Appendix~I = Noisy-SGD
-        \item Appendices~J--L = image-noise material
-    \end{itemize}
-    \item Table III now points the synthetic image to Appendices~J--L.
-    \item The duplicated image-noise paragraph has been removed.
-    \item The old H0a / broken appendix-reference issue appears fixed.
-    \item The build script now performs the extra final rebuild of \texttt{main.tex}.
+  \item Abstract, line 5: ``enabling calibrated differentially private release of histogram statistics'' -- grammatically correct but ambiguous; clarify that it is the \emph{entropy} of the histogram statistics that is being released privately.
+  \item Section~I, paragraph ``Contribution'': ``we derive an explicit \textbf{entropy sensitivity bound} \ldots (Theorem~\ref{thm4})'' -- the label \texttt{thm4} renders as Theorem~3 in the PDF (Shannon entropy sensitivity); using ``Theorem~3'' here would be consistent with the rendered output. This is a symptom of the broader numbering inconsistency noted in M1.
+  \item Section~V-K, last sentence: ``Theorem~\ref{thm4} and sensitivity 1 for bin counts justify the noise scale'' -- Theorem~4 in the rendered PDF is the DP guarantee for $\mathcal{F}$, not the entropy sensitivity theorem. The correct reference is Theorem~3.
 \end{itemize}
 
-\subsection*{One remaining issue to fix}
+\end{enumerate}
+
+%--------------------------------------------------------------
+\section{Questions for Authors}
+%--------------------------------------------------------------
+
+\begin{enumerate}[label=\textbf{Q\arabic*.}, leftmargin=*, wide=0pt]
+
+\item How should a practitioner choose the proposal distribution $p_s(\cdot)$ and partition function $I_s(y)$ to satisfy the conditions of Theorem~4 in a specific domain (e.g., tabular health records)? Is there a recommended default instantiation?
+
+\item The Wiener kernel is described as having the form $K(x,\cdot) = \sum_{i=1}^\infty \lambda_i \psi_i(x)\varphi_i(\cdot)$, but the experiments use a ``Chi-square--like process.'' What is the relationship between the Wiener kernel and this stochastic process? Is the Gaussian mechanism applied in the RKHS directly, or to finite-dimensional projections?
+
+\item For the MIA in Section~V-J, does the adversary have access to the \emph{true} dataset membership labels for training? If so, this is an unrealistically strong assumption. Please clarify the exact threat model for the attack experiments.
+
+\item The supplementary appendix lists Figure~S3 with caption ``Additional experiment (see text)'' but the figure itself shows a Chi-square-like process comparison at $\rho = 0.1$ with only an ``Original mean'' curve (no private mean visible). Is this figure complete, and what conclusion should the reader draw from it?
+
+\end{enumerate}
+
+%--------------------------------------------------------------
+\section{Summary of Required Changes}
+%--------------------------------------------------------------
+
+\begin{center}
+\begin{tabular}{@{}llc@{}}
+\toprule
+\textbf{Issue} & \textbf{Type} & \textbf{Priority} \\
+\midrule
+Theorem numbering inconsistency (M1) & Presentation & Critical \\
+Rényi entropy not integrated into pipeline (M2) & Theory/Experiment & Critical \\
+Proof gap in Theorem~3 Case~2 (M3) & Theory & Critical \\
+Mechanism $\mathcal{F}$ underspecified (M4) & Theory & Major \\
+Double-counting in $\delta$ bound (M5) & Theory & Major \\
+No composition across adjacency models (M6) & Theory & Major \\
+Weak MIA evaluation (M7) & Experiment & Major \\
+Trivial linkage attack (M8) & Experiment & Major \\
+Wiener-kernel privacy unverified (M9) & Theory/Experiment & Major \\
+Insufficient statistical repetitions (M10) & Experiment & Moderate \\
+Missing baseline comparison (M11) & Experiment & Moderate \\
+Notation clash for $k$ (m1) & Notation & Moderate \\
+Misleading abstract claim (m2) & Presentation & Moderate \\
+REAEDP acronym undefined (m3) & Presentation & Minor \\
+Algorithm~1 mixes two algorithms (m4) & Presentation & Minor \\
+Missing sensitivity proof for bin counts (m6) & Theory & Moderate \\
+Unexplained supplementary figures (m7) & Presentation & Minor \\
+No composition budget discussion (m9) & Theory & Moderate \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%--------------------------------------------------------------
+\section{Additional References Suggested}
+%--------------------------------------------------------------
+
+The following references are relevant and should be cited or compared against where appropriate:
+
 \begin{itemize}
-    \item In \texttt{appendix\_main.tex}, the mechanism-\(F\) headings are still plain text:
-\begin{verbatim}
-Domain and range
-Input
-Seed selection
-Candidate generation
-Partition rule
-Privacy-test random variable
-Acceptance rule
-Output and termination
-\end{verbatim}
-    rather than formal heading commands.
+  \item R.\ Shokri, M.\ Stronati, C.\ Song, and V.\ Shmatikov, ``Membership inference attacks against machine learning models,'' \textit{IEEE S\&P}, 2017.
+  \item N.\ Carlini, S.\ Chien, M.\ Nasr, S.\ Song, A.\ Terzis, and F.\ Tramer, ``Membership inference attacks from first principles,'' \textit{IEEE S\&P}, 2022.
+  \item S.\ Zhang et al., ``PrivSyn: Differentially private data synthesis,'' \textit{USENIX Security}, 2021.
+  \item R.\ McKenna, B.\ Mullins, D.\ Sheldon, and G.\ Miklau, ``AIM: An adaptive and iterative mechanism for differentially private synthetic data,'' \textit{VLDB}, 2022.
+  \item R.\ Aydore, W.\ Brown, M.\ Kearns, K.\ Kenthapadi, L.\ Melis, A.\ Roth, and A.\ Siva, ``Differentially private query release through adaptive projection,'' \textit{ICML}, 2021.
+  \item M.\ Hardt and G.\ N.\ Rothblum, ``A multiplicative weights mechanism for privacy-preserving data analysis,'' \textit{FOCS}, 2010. (Foundational for histogram DP release.)
 \end{itemize}
 
-\subsection*{Recommended replacement}
-\begin{verbatim}
-\subsection*{Domain and range}
-...
-
-\subsection*{Input}
-...
-
-\subsection*{Seed selection}
-...
-
-\subsection*{Candidate generation}
-...
-
-\subsection*{Partition rule}
-...
-
-\subsection*{Privacy-test random variable}
-...
-
-\subsection*{Acceptance rule}
-...
-
-\subsection*{Output and termination}
-...
-\end{verbatim}
-
-\subsection*{Optional presentation improvement}
-\begin{itemize}
-    \item The supplementary appendix still uses labels such as Fig.~1 / Fig.~2 while the main paper also uses Fig.~1 / Fig.~2. This is not wrong, but using Fig.~S1 / Fig.~S2 and Table~S1 would look cleaner.
-\end{itemize}
-
-\subsection*{Overall judgment}
-\begin{verbatim}
-Main paper: clean
-Appendix references: correct
-Build workflow: correct
-Remaining mandatory fixes: none major
-Remaining polish: appendix heading style
-\end{verbatim}
+\end{document}
