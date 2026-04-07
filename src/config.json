@@ -7,7 +7,13 @@
     "image_noise",
     "epsilon_utility_curve",
     "entropy_bound_curve",
-    "metrics_comparison"
+    "metrics_comparison",
+    "baseline_comparison",
+    "tabular_synth_benchmark",
+    "ablation",
+    "mia_evaluation",
+    "delta_h_empirical",
+    "csv_entropy_all"
   ],
   "entropy_sensitivity": {
     "out_csv": "data/entropy_sensitivity_results.csv",
@@ -31,6 +37,7 @@
     "n_paths": 50,
     "epsilon": 1.0,
     "delta": 1e-5,
+    "rank_figures": [[4, "fig2"], [8, "fig3"], [16, "fig4"]],
     "dpi": 150
   },
   "privacy_test_fig1": {
@@ -88,6 +95,17 @@
     "mwem_rounds": 24,
     "bins": 30,
     "max_rows": 50000,
+    "dpi": 150
+  },
+  "tabular_synth_benchmark": {
+    "input": "data/home-credit-application-train.csv",
+    "seed": 42,
+    "delta": 1e-5,
+    "epsilons": [0.5, 1.0, 2.0, 4.0],
+    "n_runs": 8,
+    "max_rows": 50000,
+    "out_csv": "data/tabular_synth_results.csv",
+    "out_fig": "fig_tabular_synth.png",
     "dpi": 150
   },
   "ablation": {

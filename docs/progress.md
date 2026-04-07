@@ -10,10 +10,12 @@
 - 已将新的实验结果写回论文；修改说明：`paper/main.tex` 与 `paper/appendix.tex` 已改写 MIA、baseline comparison 与 Wiener-kernel 相关段落，不再声称当前结果未支持的结论，例如“所有攻击都接近随机”或“更大的 $\rho$ 单调提升 Wiener utility”。
 - 已重新编译并验证论文当前可构建；修改说明：`paper/build.bat` 已成功生成 `paper/main.pdf` 与 `paper/appendix.pdf`，实验更新后的图和文本均已进入 PDF，没有新增构建失败。
 - 已完成当前 `docs/revision_suggestions.tex` 下的强制修改项；修改说明：当前主文与附录的理论表述、baseline、攻击实验、supplementary 定位和 progress 记录已经同步到同一状态，不再存在必须继续挂在“未修改”名下的强制条目。
+- 已补齐 attribute inference 实验并扩展 multivariate tabular attack 面；修改说明：新增 `src/experiments/run_tabular_synth_benchmark.py`，在 Home Credit 上以 quasi-identifier 预测 income bin，结果写入 `src/data/tabular_synth_results.csv` 并生成 `paper/figs/fig_tabular_synth.png`；主文已不再把 attribute inference 写成“仅属于 threat model 但未实测”。
+- 已加入更成熟且可解释的 tabular synthesizer baseline；修改说明：新增 `src/algorithms/tabular_synthesizers.py` 与兼容导入 `src/reaedp/tabular_synthesizers.py`，实现离散 tabular 的 DP Gaussian copula，并与 independent private marginals 做 utility / privacy 对比；正文已把 synthetic-data 竞争力叙事从单纯 MWEM reference 扩展到 multivariate tabular benchmark。
+- 已重做 supplementary functional-release mechanism；修改说明：`src/algorithms/wiener_kernel.py` 已从旧的离散 smoothing-operator/$\rho$ 版本改为 Wiener KL spectral coefficient release，`src/experiments/run_wiener_figures.py` 已改为 rank-based 图和 summary；正文与附录已同步改写为 spectral rank 的 approximation--noise tradeoff，不再沿用旧的 $\rho$ 叙述。
+- 已完成一轮定向版式清理；修改说明：`paper/main.tex` 与 `paper/appendix.tex` 已处理数学标题导致的 `hyperref` warning，并压缩附录 figure/table 描述表；当前构建日志中已不再有这类 token warning。
 
 ## 未修改或部分修改
 
-- 更强的 attribute inference 或更贴近 release 语义的 record-level attack 仍未完成；修改说明：本轮已经把 MIA 与 linkage-style 攻击补强，并加入 likelihood-ratio attacker；未修改原因：当前仓库中还没有与现有 release pipeline 对齐、且能低成本补进主文的 attribute inference 实验实现；后续准备如何修改：若继续扩展攻击面，优先补 attribute inference，或设计更贴近发布对象的 record-level inference protocol。
-- 更成熟的 tabular DP synthesizer baseline 仍未补入；修改说明：这轮已经加入 MWEM-style baseline，使“真正的 DP synthetic baseline”不再缺位；未全部修改原因：当前一维 histogram workload 下，继续补更复杂 synthesizer 的解释收益有限，且容易把论文重心从 theorem-aligned release 拉偏；后续准备如何修改：只有在需要显著强化 synthetic-data 竞争力叙事时，再补一个更成熟且可解释的 tabular synthesizer。
-- Wiener-kernel 部分尚未重做为更强的 functional-release 结果；修改说明：当前已根据真实结果把它降格为 supplementary diagnostic，避免过强 claim；未全部修改原因：现有离散化实现下，$\rho$ 与 utility 的关系仍不够理想，直接重写需要新的机制设计而不是小修小补；后续准备如何修改：若后续要重新升格这一部分，需要先重做 functional-release mechanism 与相应实验，而不是继续沿用当前实现做表述优化。
-- LaTeX 版式警告仍未完全清理；修改说明：当前 `paper/build.bat` 可以稳定生成最新 PDF；未全部修改原因：还残留少量 underfull / overfull box、multiply-defined labels 与 hyperref token warning，但这些属于投稿前的版式清理，不影响当前 revision cycle 完成；后续准备如何修改：投稿前单独做一次版式清理，优先处理附录表格和含数学的标题/图注。
+- 更贴近真实发布流程的 record-level inference / linkage protocol 仍可继续加强；修改说明：本轮已补齐 attribute inference，并保留原有更强 MIA 与 linkage-style 攻击；未全部修改原因：当前新增攻击仍主要基于 tabular synthetic release 上的 supervised inference，而不是更复杂的 auxiliary-record matching protocol；后续准备如何修改：若继续扩展攻击面，可围绕固定辅助信息、部分记录可见、目标记录重识别等协议再加一层评测。
+- LaTeX 版式警告仍未完全清理；修改说明：当前 `paper/build.bat` 可以稳定生成最新 PDF，且数学标题造成的 `hyperref` warning 已清掉；未全部修改原因：还残留少量 underfull / overfull box 与 `dwork2014algorithmic` 的 multiply-defined label 提示；后续准备如何修改：投稿前单独做一次版式精修，重点压缩 related-work 表格、长公式与少量双栏断词位置，并定位该重复 label 的根源。
