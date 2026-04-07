@@ -1,7 +1,7 @@
 """
-Baseline comparison: Laplace, Gaussian, and DP synthetic (Laplace/Gaussian + multinomial sample).
-Utility: entropy preservation error |H_orig - H_noisy| and count MAE.
-Output: paper/figs/fig_baseline.png
+Baseline comparison: Laplace, Gaussian, lightweight synthetic baselines, and MWEM.
+Utility: entropy preservation error and count MAE for histogram release/synthesis.
+Output: paper/figs/fig_baseline.png, data/baseline_results.csv
 """
 import sys
 import os
@@ -35,6 +35,39 @@ def dp_synthetic_gaussian(counts: np.ndarray, n: int, eps: float, delta: float, 
     return rng.multinomial(n, p).astype(float)
 
 
+def mwem_synthetic(counts: np.ndarray, n: int, eps: float, rounds: int, rng: np.random.Generator) -> np.ndarray:
+    """A simple MWEM-style 1D DP synthetic baseline over histogram-bin queries."""
+    m = len(counts)
+    real_dist = counts / max(n, 1)
+    dist = np.full(m, 1.0 / m, dtype=float)
+    eps_sel = eps / (2 * rounds)
+    eps_meas = eps / (2 * rounds)
+    measured = {}
+
+    for _ in range(rounds):
+        scores = np.abs(real_dist - dist)
+        weights = np.exp((eps_sel / 2.0) * (scores - scores.max()))
+        probs = weights / weights.sum()
+        idx = int(rng.choice(np.arange(m), p=probs))
+        noisy_answer = float(real_dist[idx] + rng.laplace(0.0, 1.0 / max(n * eps_meas, 1e-10)))
+        measured[idx] = min(max(noisy_answer, 1e-9), 1.0)
+
+        for q_idx, target in measured.items():
+            target = min(max(float(target), 1e-9), 1.0 - 1e-9)
+            other = np.delete(dist, q_idx)
+            other_sum = float(other.sum())
+            if other_sum <= 0:
+                dist = np.full(m, 1.0 / m, dtype=float)
+                other_sum = float(np.delete(dist, q_idx).sum())
+            scale = max(1.0 - target, 1e-12) / other_sum
+            dist *= scale
+            dist[q_idx] = target
+            dist = np.maximum(dist, 1e-12)
+            dist /= dist.sum()
+
+    return rng.multinomial(n, dist).astype(float)
+
+
 def main(config=None):
     config = config or {}
     seed = config.get("seed", 42)
@@ -65,12 +98,14 @@ def main(config=None):
 
     err_entropy_lap, err_entropy_gau = [], []
     err_entropy_synth_lap, err_entropy_synth_gau = [], []
+    err_entropy_mwem = []
     mae_lap, mae_gau = [], []
     mae_synth_lap, mae_synth_gau = [], []
+    mae_mwem = []
 
     for eps in epsilons:
-        e_l, e_g, e_sl, e_sg = [], [], [], []
-        m_l, m_g, m_sl, m_sg = [], [], [], []
+        e_l, e_g, e_sl, e_sg, e_mwem = [], [], [], [], []
+        m_l, m_g, m_sl, m_sg, m_mwem = [], [], [], [], []
         for _ in range(n_trials):
             noisy_l = laplace_mechanism(counts, sensitivity=1.0, epsilon=eps, rng=rng)
             noisy_l = np.maximum(noisy_l, 0)
@@ -91,14 +126,36 @@ def main(config=None):
             e_sg.append(abs(H_orig - H_sg))
             m_sl.append(np.abs(syn_l - counts).mean())
             m_sg.append(np.abs(syn_g - counts).mean())
+            syn_mwem = mwem_synthetic(counts, n, eps, config.get("mwem_rounds", 8), rng)
+            H_mwem = shannon_entropy(syn_mwem)
+            e_mwem.append(abs(H_orig - H_mwem))
+            m_mwem.append(np.abs(syn_mwem - counts).mean())
         err_entropy_lap.append(np.mean(e_l))
         err_entropy_gau.append(np.mean(e_g))
         err_entropy_synth_lap.append(np.mean(e_sl))
         err_entropy_synth_gau.append(np.mean(e_sg))
+        err_entropy_mwem.append(np.mean(e_mwem))
         mae_lap.append(np.mean(m_l))
         mae_gau.append(np.mean(m_g))
         mae_synth_lap.append(np.mean(m_sl))
         mae_synth_gau.append(np.mean(m_sg))
+        mae_mwem.append(np.mean(m_mwem))
+
+    os.makedirs(DATA_DIR, exist_ok=True)
+    pd.DataFrame({
+        "epsilon": epsilons,
+        "entropy_laplace": err_entropy_lap,
+        "entropy_gaussian": err_entropy_gau,
+        "entropy_dp_synth_laplace": err_entropy_synth_lap,
+        "entropy_dp_synth_gaussian": err_entropy_synth_gau,
+        "entropy_mwem": err_entropy_mwem,
+        "mae_laplace": mae_lap,
+        "mae_gaussian": mae_gau,
+        "mae_dp_synth_laplace": mae_synth_lap,
+        "mae_dp_synth_gaussian": mae_synth_gau,
+        "mae_mwem": mae_mwem,
+        "delta_h_bound": [bound_H] * len(epsilons),
+    }).to_csv(os.path.join(DATA_DIR, "baseline_results.csv"), index=False)
 
     os.makedirs(FIG_DIR, exist_ok=True)
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 3.5))
@@ -106,6 +163,7 @@ def main(config=None):
     ax1.plot(epsilons, err_entropy_gau, "s-", label="Gaussian", color="C1")
     ax1.plot(epsilons, err_entropy_synth_lap, "^-", label="DP synthetic (Laplace)", color="C2")
     ax1.plot(epsilons, err_entropy_synth_gau, "v-", label="DP synthetic (Gaussian)", color="C3")
+    ax1.plot(epsilons, err_entropy_mwem, "d-", label="MWEM synthetic", color="C4")
     ax1.axhline(bound_H, color="gray", linestyle="--", label="$\\Delta_H$ bound (Th.4)")
     ax1.set_xlabel("$\\varepsilon$")
     ax1.set_ylabel("$|H_{\\mathrm{orig}} - H_{\\mathrm{noisy}}|$")
@@ -117,6 +175,7 @@ def main(config=None):
     ax2.plot(epsilons, mae_gau, "s-", label="Gaussian", color="C1")
     ax2.plot(epsilons, mae_synth_lap, "^-", label="DP synthetic (Laplace)", color="C2")
     ax2.plot(epsilons, mae_synth_gau, "v-", label="DP synthetic (Gaussian)", color="C3")
+    ax2.plot(epsilons, mae_mwem, "d-", label="MWEM synthetic", color="C4")
     ax2.set_xlabel("$\\varepsilon$")
     ax2.set_ylabel("MAE (counts)")
     ax2.set_title("Histogram count MAE vs $\\varepsilon$")

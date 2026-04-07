@@ -24,6 +24,8 @@
   },
   "wiener_figures": {
     "out_csv": "data/wiener_curves.csv",
+    "summary_csv": "data/wiener_summary.csv",
+    "summary_fig": "fig8.png",
     "seed": 42,
     "n_t": 80,
     "n_paths": 50,
@@ -82,7 +84,8 @@
     "seed": 42,
     "delta": 1e-5,
     "epsilons": [0.25, 0.5, 1.0, 2.0, 4.0],
-    "n_trials": 10,
+    "n_trials": 12,
+    "mwem_rounds": 24,
     "bins": 30,
     "max_rows": 50000,
     "dpi": 150
@@ -97,8 +100,8 @@
   "mia_evaluation": {
     "seed": 42,
     "epsilons": [0.5, 1.0, 2.0, 4.0, 8.0],
-    "n_trials": 200,
-    "n_runs": 5,
+    "n_trials": 250,
+    "n_runs": 20,
     "bins": 30,
     "max_rows": 10000,
     "dpi": 150
