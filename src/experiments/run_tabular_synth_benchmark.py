@@ -144,6 +144,64 @@ def train_attribute_inference(
     )
 
 
+def partial_record_inference_accuracy(
+    reference_df: pd.DataFrame,
+    target_df: pd.DataFrame,
+    known_cols: list[str],
+    hidden_col: str,
+) -> float:
+    reference_known = reference_df[known_cols].to_numpy(dtype=int)
+    reference_hidden = reference_df[hidden_col].to_numpy(dtype=int)
+    ref_patterns, ref_inverse = np.unique(reference_known, axis=0, return_inverse=True)
+    hidden_domain = int(max(reference_hidden.max(), target_df[hidden_col].max())) + 1
+    ref_hidden_counts = np.zeros((len(ref_patterns), hidden_domain), dtype=int)
+    for idx, hidden in zip(ref_inverse, reference_hidden):
+        ref_hidden_counts[idx, int(hidden)] += 1
+
+    target_known = target_df[known_cols].to_numpy(dtype=int)
+    target_patterns, target_inverse = np.unique(target_known, axis=0, return_inverse=True)
+    pattern_predictions = np.zeros(len(target_patterns), dtype=int)
+    for pattern_idx, pattern in enumerate(target_patterns):
+        matches = np.all(ref_patterns == pattern, axis=1)
+        candidate_counts = ref_hidden_counts[matches]
+        if candidate_counts.size == 0:
+            distances = (ref_patterns != pattern).sum(axis=1)
+            nearest = np.flatnonzero(distances == distances.min())
+            candidate_counts = ref_hidden_counts[nearest]
+        pattern_predictions[pattern_idx] = int(candidate_counts.sum(axis=0).argmax())
+
+    predictions = pattern_predictions[target_inverse]
+    truth = target_df[hidden_col].to_numpy(dtype=int)
+    return float((np.asarray(predictions) == truth).mean())
+
+
+def linkage_target_accuracy(
+    reference_df: pd.DataFrame,
+    target_df: pd.DataFrame,
+    known_cols: list[str],
+    hidden_col: str,
+) -> float:
+    reference_known = reference_df[known_cols].to_numpy(dtype=int)
+    reference_hidden = reference_df[hidden_col].to_numpy(dtype=int)
+    ref_patterns, ref_inverse = np.unique(reference_known, axis=0, return_inverse=True)
+    hidden_domain = int(max(reference_hidden.max(), target_df[hidden_col].max())) + 1
+    ref_hidden_counts = np.zeros((len(ref_patterns), hidden_domain), dtype=int)
+    for idx, hidden in zip(ref_inverse, reference_hidden):
+        ref_hidden_counts[idx, int(hidden)] += 1
+
+    target_known = target_df[known_cols].to_numpy(dtype=int)
+    target_patterns, target_inverse = np.unique(target_known, axis=0, return_inverse=True)
+    pattern_predictions = np.zeros(len(target_patterns), dtype=int)
+    for pattern_idx, pattern in enumerate(target_patterns):
+        distances = (ref_patterns != pattern).sum(axis=1)
+        nearest = np.flatnonzero(distances == distances.min())
+        pattern_predictions[pattern_idx] = int(ref_hidden_counts[nearest].sum(axis=0).argmax())
+
+    predictions = pattern_predictions[target_inverse]
+    truth = target_df[hidden_col].to_numpy(dtype=int)
+    return float((np.asarray(predictions) == truth).mean())
+
+
 def summarize_runs(values: list[float]) -> tuple[float, float]:
     arr = np.asarray(values, dtype=float)
     mean = float(arr.mean())
@@ -173,6 +231,10 @@ def main(config=None):
 
     real_target_auc = train_logistic_auc(train_df, test_df, feature_cols + ["income_bin"], "target")
     real_attr_acc, real_attr_f1 = train_attribute_inference(train_df, test_df, feature_cols, "income_bin")
+    partial_known_cols = ["gender", "own_car", "own_realty", "children_bin", "age_bin"]
+    linkage_known_cols = feature_cols
+    real_partial_acc = partial_record_inference_accuracy(train_df, test_df, partial_known_cols, "income_bin")
+    real_linkage_acc = linkage_target_accuracy(train_df, test_df, linkage_known_cols, "income_bin")
 
     methods = {
         "independent": lambda data, eps, local_rng: sample_independent_synthetic(
@@ -196,6 +258,8 @@ def main(config=None):
                 "target_auc": [],
                 "attribute_acc": [],
                 "attribute_macro_f1": [],
+                "partial_income_acc": [],
+                "linkage_income_acc": [],
             }
             for run_idx in range(n_runs):
                 local_rng = np.random.default_rng(
@@ -217,6 +281,22 @@ def main(config=None):
                 )
                 metric_runs["attribute_acc"].append(attr_acc)
                 metric_runs["attribute_macro_f1"].append(attr_f1)
+                metric_runs["partial_income_acc"].append(
+                    partial_record_inference_accuracy(
+                        synth_df,
+                        test_df,
+                        partial_known_cols,
+                        "income_bin",
+                    )
+                )
+                metric_runs["linkage_income_acc"].append(
+                    linkage_target_accuracy(
+                        synth_df,
+                        test_df,
+                        linkage_known_cols,
+                        "income_bin",
+                    )
+                )
 
             row = {"epsilon": float(eps), "method": method_name}
             for key, values in metric_runs.items():
@@ -229,6 +309,8 @@ def main(config=None):
     results_df["real_target_auc"] = real_target_auc
     results_df["real_attribute_acc"] = real_attr_acc
     results_df["real_attribute_macro_f1"] = real_attr_f1
+    results_df["real_partial_income_acc"] = real_partial_acc
+    results_df["real_linkage_income_acc"] = real_linkage_acc
 
     out_csv = str(
         resolve_workspace_path(config.get("out_csv") or str(DATA_DIR / "tabular_synth_results.csv"))
@@ -238,7 +320,7 @@ def main(config=None):
     print(f"Saved {out_csv}")
 
     os.makedirs(FIG_DIR, exist_ok=True)
-    fig, axes = plt.subplots(2, 2, figsize=(8.2, 5.6))
+    fig, axes = plt.subplots(2, 3, figsize=(10.0, 5.8))
     styles = {
         "independent": ("C1", "s-", "Independent marginals"),
         "gaussian_copula": ("C0", "o-", "DP Gaussian copula"),
@@ -281,15 +363,37 @@ def main(config=None):
             capsize=3,
             label=label,
         )
+        axes[1, 2].errorbar(
+            group["epsilon"],
+            group["partial_income_acc"],
+            yerr=group["partial_income_acc_ci95"],
+            fmt=fmt,
+            color=color,
+            capsize=3,
+            label=label,
+        )
+        axes[0, 2].errorbar(
+            group["epsilon"],
+            group["linkage_income_acc"],
+            yerr=group["linkage_income_acc_ci95"],
+            fmt=fmt,
+            color=color,
+            capsize=3,
+            label=label,
+        )
 
     axes[0, 0].set_title("Marginal TV vs $\\varepsilon$")
     axes[0, 0].set_ylabel("Average TV")
     axes[0, 1].set_title("Dependence Error vs $\\varepsilon$")
     axes[0, 1].set_ylabel("Average |corr error|")
+    axes[0, 2].set_title("Linkage Inference vs $\\varepsilon$")
+    axes[0, 2].set_ylabel("Income accuracy")
     axes[1, 0].set_title("Downstream AUC vs $\\varepsilon$")
     axes[1, 0].set_ylabel("AUC on real holdout")
     axes[1, 1].set_title("Attribute Inference vs $\\varepsilon$")
     axes[1, 1].set_ylabel("Attack accuracy")
+    axes[1, 2].set_title("Partial-Record Inference vs $\\varepsilon$")
+    axes[1, 2].set_ylabel("Income accuracy")
 
     for ax in axes.ravel():
         ax.set_xlabel("$\\varepsilon$")
@@ -309,10 +413,26 @@ def main(config=None):
         linewidth=1.0,
         label="Real-train upper bound",
     )
+    axes[1, 2].axhline(
+        real_partial_acc,
+        color="black",
+        linestyle="--",
+        linewidth=1.0,
+        label="Real-train upper bound",
+    )
+    axes[0, 2].axhline(
+        real_linkage_acc,
+        color="black",
+        linestyle="--",
+        linewidth=1.0,
+        label="Real-train upper bound",
+    )
     axes[1, 1].axhline(0.25, color="gray", linestyle=":", linewidth=1.0, label="Random guess")
     axes[0, 0].legend(fontsize=7)
+    axes[0, 2].legend(fontsize=7)
     axes[1, 0].legend(fontsize=7)
     axes[1, 1].legend(fontsize=7)
+    axes[1, 2].legend(fontsize=7)
 
     plt.tight_layout()
     out_fig = os.path.join(FIG_DIR, config.get("out_fig", "fig_tabular_synth.png"))

@@ -14,8 +14,9 @@
 - 已加入更成熟且可解释的 tabular synthesizer baseline；修改说明：新增 `src/algorithms/tabular_synthesizers.py` 与兼容导入 `src/reaedp/tabular_synthesizers.py`，实现离散 tabular 的 DP Gaussian copula，并与 independent private marginals 做 utility / privacy 对比；正文已把 synthetic-data 竞争力叙事从单纯 MWEM reference 扩展到 multivariate tabular benchmark。
 - 已重做 supplementary functional-release mechanism；修改说明：`src/algorithms/wiener_kernel.py` 已从旧的离散 smoothing-operator/$\rho$ 版本改为 Wiener KL spectral coefficient release，`src/experiments/run_wiener_figures.py` 已改为 rank-based 图和 summary；正文与附录已同步改写为 spectral rank 的 approximation--noise tradeoff，不再沿用旧的 $\rho$ 叙述。
 - 已完成一轮定向版式清理；修改说明：`paper/main.tex` 与 `paper/appendix.tex` 已处理数学标题导致的 `hyperref` warning，并压缩附录 figure/table 描述表；当前构建日志中已不再有这类 token warning。
+- 已修复跨文档引用导致的重复 label 告警，并补齐 record-level tabular attacks；修改说明：`paper/build.bat` 现生成剥离 bibliography label 的 `main_xr.aux` / `appendix_xr.aux` 供 `xr` 使用，`dwork2014algorithmic` 的 multiply-defined warning 已消失；`src/experiments/run_tabular_synth_benchmark.py` 已扩展为 attribute inference、partial-record inference 与 linkage-based income inference，最新结果已回写 `src/data/tabular_synth_results.csv`、`paper/figs/fig_tabular_synth.png` 并同步进入主文。
 
 ## 未修改或部分修改
 
-- 更贴近真实发布流程的 record-level inference / linkage protocol 仍可继续加强；修改说明：本轮已补齐 attribute inference，并保留原有更强 MIA 与 linkage-style 攻击；未全部修改原因：当前新增攻击仍主要基于 tabular synthetic release 上的 supervised inference，而不是更复杂的 auxiliary-record matching protocol；后续准备如何修改：若继续扩展攻击面，可围绕固定辅助信息、部分记录可见、目标记录重识别等协议再加一层评测。
-- LaTeX 版式警告仍未完全清理；修改说明：当前 `paper/build.bat` 可以稳定生成最新 PDF，且数学标题造成的 `hyperref` warning 已清掉；未全部修改原因：还残留少量 underfull / overfull box 与 `dwork2014algorithmic` 的 multiply-defined label 提示；后续准备如何修改：投稿前单独做一次版式精修，重点压缩 related-work 表格、长公式与少量双栏断词位置，并定位该重复 label 的根源。
+- 更贴近真实发布流程的 record-level inference / linkage protocol 仍可继续加强；修改说明：本轮已补齐 partial-record inference 与 linkage-based income inference，并保留原有更强 MIA 与 linkage-style 攻击；未全部修改原因：当前协议仍基于 quasi-identifier profile matching，而不是更复杂的 external auxiliary-record matching；后续准备如何修改：若继续扩展攻击面，可围绕固定辅助信息、目标记录重识别和更强 attacker priors 再加一层评测。
+- LaTeX 版式警告仍未完全清理；修改说明：当前 `paper/build.bat` 可以稳定生成最新 PDF，且 `dwork2014algorithmic` 重复 label 与 `hyperref` token warning 已清掉；未全部修改原因：仍残留少量 underfull / overfull box，主要来自双栏断词与个别长公式；后续准备如何修改：投稿前单独做一次版式精修，重点压缩少量长句、长公式与双栏断词位置。
